@@ -161,28 +161,31 @@ print(Counter(ips).most_common(5))</code></pre>
     </ol>
   </section>
 
-  <!-- CERTIFICATIONS -->
-  <section id="certs" class="mx-auto max-w-6xl px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">Certifications</h2>
+<!-- CERTIFICATIONS -->
+<section id="certs" class="mx-auto max-w-6xl px-4 py-8">
+  <h2 class="text-2xl font-bold mb-4">Certifications</h2>
 
-    <div class="rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
-      <div class="flex flex-col md:flex-row gap-6 items-start">
-        <img src="./cert-foundations.JPG" alt="Google Foundations of Cybersecurity Certificate"
-             class="w-full md:w-1/2 rounded-xl border border-white/10 bg-slate-900/50 object-contain">
-        <div class="flex-1">
-          <h3 class="text-lg font-semibold text-cyan-200">Google — Foundations of Cybersecurity</h3>
-          <p class="text-slate-300 mt-2">Completed on Nov 13, 2025</p>
-          <div class="mt-4 flex flex-wrap gap-3">
-            <a href="https://coursera.org/verify/BQG7YW6GGDH" target="_blank" rel="noopener"
-               class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Verify credential</a>
-            <a href="./resume.pdf" target="_blank" rel="noopener"
-               class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Open Resume</a>
-          </div>
-          <p class="text-slate-400 text-sm mt-4">If the image doesn’t show yet, upload it to the repo root as <code>cert-foundations.jpg</code>.</p>
+  <div class="rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
+    <div class="flex flex-col md:flex-row gap-6 items-start">
+      <!-- Thumbnail (tap to open full screen) -->
+      <img id="certThumb" src="./cert-foundations.JPG" alt="Google Foundations of Cybersecurity Certificate"
+           class="w-full md:w-1/2 rounded-xl border border-white/10 bg-slate-900/50 object-contain cursor-zoom-in">
+      <div class="flex-1">
+        <h3 class="text-lg font-semibold text-cyan-200">Google — Foundations of Cybersecurity</h3>
+        <p class="text-slate-300 mt-2">Completed on Nov 13, 2025</p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a href="https://coursera.org/verify/BQG7YW6GGDH" target="_blank" rel="noopener"
+             class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Verify credential</a>
+          <a href="./resume.pdf" target="_blank" rel="noopener"
+             class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Open Resume</a>
         </div>
+        <p class="text-slate-400 text-sm mt-4">
+          Tip: make sure the file name exactly matches <code>cert-foundations.JPG</code> (case-sensitive).
+        </p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- CONTACT -->
   <section id="contact" class="mx-auto max-w-6xl px-4 py-10">
@@ -195,5 +198,27 @@ print(Counter(ips).most_common(5))</code></pre>
     © <span id="y"></span> Wykiyanos — Built with Tailwind • Hosted on GitHub Pages
   </footer>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+<!-- Fullscreen lightbox -->
+<div id="lightbox" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50">
+  <button id="closeLb" class="absolute top-4 right-4 px-3 py-1.5 rounded-md bg-white/10 border border-white/20 text-white hover:bg-white/20">✕</button>
+  <img id="lbImg" src="./cert-foundations.JPG" class="max-w-[95vw] max-h-[90vh] rounded-md border border-white/10">
+</div>
+
+<script>
+(() => {
+  const thumb = document.getElementById('certThumb');
+  const box   = document.getElementById('lightbox');
+  const img   = document.getElementById('lbImg');
+  const close = document.getElementById('closeLb');
+
+  function openBox() { img.src = thumb.src; box.classList.remove('hidden'); box.classList.add('flex'); }
+  function closeBox() { box.classList.add('hidden'); box.classList.remove('flex'); }
+
+  thumb?.addEventListener('click', openBox);
+  close.addEventListener('click', closeBox);
+  box.addEventListener('click', (e) => { if (e.target === box) closeBox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBox(); });
+})();
+</script>
 </body>
 </html>
