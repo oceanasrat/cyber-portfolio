@@ -8,9 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    try { document.documentElement.classList.add('dark'); } catch (e) {}
-  </script>
+  <script>try{document.documentElement.classList.add('dark')}catch(e){}</script>
   <style>
     :root{--neon:#22d3ee;}
     .neon { box-shadow: 0 0 0 .5px rgba(34,211,238,.6), 0 0 16px rgba(34,211,238,.35); }
@@ -31,12 +29,13 @@
         <a href="#projects" class="hover:text-white">Projects</a>
         <a href="#skills" class="hover:text-white">Skills</a>
         <a href="#progress" class="hover:text-white">Progress</a>
+        <a href="#certs" class="hover:text-white">Certifications</a>
         <a href="#contact" class="hover:text-white">Contact</a>
       </div>
-      <!-- Auto-fixing GitHub Repo button -->
-      <a id="repoLink" href="#" target="_blank" rel="noopener"
+      <!-- Resume button (opens the PDF you upload to repo root) -->
+      <a href="./resume.pdf" target="_blank" rel="noopener"
          class="px-3 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-500/30 neon">
-        GitHub Repo
+        Resume
       </a>
     </nav>
   </header>
@@ -54,6 +53,8 @@
         </p>
         <div class="mt-6 flex flex-wrap gap-3">
           <a href="#projects" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">View Projects</a>
+          <a href="./resume.pdf" target="_blank" rel="noopener"
+             class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Open Resume</a>
         </div>
       </div>
       <div class="relative">
@@ -148,7 +149,7 @@ print(Counter(ips).most_common(5))</code></pre>
   <section id="progress" class="mx-auto max-w-6xl px-4 py-8">
     <h2 class="text-2xl font-bold mb-4">Course Progress</h2>
     <ol class="space-y-2 text-slate-300 list-decimal list-inside">
-      <li><span class="text-white font-semibold">Foundations of Cybersecurity</span> — In Progress</li>
+      <li><span class="text-white font-semibold">Foundations of Cybersecurity</span> — ✅ Completed</li>
       <li>Manage Security Risks</li>
       <li>Networks & Network Security</li>
       <li>Linux & SQL</li>
@@ -158,6 +159,29 @@ print(Counter(ips).most_common(5))</code></pre>
       <li>Prepare for Cybersecurity Jobs</li>
       <li>Accelerate Your Job Search with AI</li>
     </ol>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certs" class="mx-auto max-w-6xl px-4 py-8">
+    <h2 class="text-2xl font-bold mb-4">Certifications</h2>
+
+    <div class="rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
+      <div class="flex flex-col md:flex-row gap-6 items-start">
+        <img src="./cert-foundations.jpg" alt="Google Foundations of Cybersecurity Certificate"
+             class="w-full md:w-1/2 rounded-xl border border-white/10 bg-slate-900/50 object-contain">
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-cyan-200">Google — Foundations of Cybersecurity</h3>
+          <p class="text-slate-300 mt-2">Completed on Nov 13, 2025</p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a href="https://coursera.org/verify/BQG7YW6GGDH" target="_blank" rel="noopener"
+               class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Verify credential</a>
+            <a href="./resume.pdf" target="_blank" rel="noopener"
+               class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Open Resume</a>
+          </div>
+          <p class="text-slate-400 text-sm mt-4">If the image doesn’t show yet, upload it to the repo root as <code>cert-foundations.jpg</code>.</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- CONTACT -->
@@ -170,23 +194,6 @@ print(Counter(ips).most_common(5))</code></pre>
   <footer class="border-t border-white/5 py-6 text-center text-slate-500 text-sm">
     © <span id="y"></span> Wykiyanos — Built with Tailwind • Hosted on GitHub Pages
   </footer>
-
-  <!-- Auto-detect the right repo link (project repo if it exists, else user-site folder) -->
-  <script>
-  (async () => {
-    const el = document.getElementById('repoLink');
-    try {
-      const r = await fetch('https://api.github.com/repos/oceanasrat/cyber-portfolio', { cache: 'no-store' });
-      if (r.ok) {
-        el.href = 'https://github.com/oceanasrat/cyber-portfolio';
-      } else {
-        el.href = 'https://github.com/oceanasrat/oceanasrat.github.io/tree/main/cyber-portfolio';
-      }
-    } catch (e) {
-      el.href = 'https://github.com/oceanasrat/oceanasrat.github.io/tree/main/cyber-portfolio';
-    }
-  })();
-  document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
