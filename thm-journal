@@ -1,0 +1,18 @@
+# TryHackMe Journal — Progress Notes
+
+## Project Introduction
+I track hands-on rooms, flags, and lessons learned to build repeatable investigation habits.
+
+## Modeling and Evaluation
+- Methods: enumeration → exploitation → reporting
+- Tools: Nmap, Gobuster, Hydra, Burp, Wireshark
+- Evaluation: verify flags; map findings to MITRE ATT&CK
+
+## Conclusion
+Consistent note-taking improves triage speed.
+**Next steps:** add 3 room write-ups with screenshots.
+
+## Artifacts
+- `/notes.md` (Coming Soon)
+- `/images/` (Coming Soon)
+- `/reports/` (Coming Soon)
