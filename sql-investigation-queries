@@ -1,0 +1,17 @@
+# SQL Investigation Queries — SOC Snippets
+
+## Project Introduction
+Reusable SQL for auth, endpoint, and network investigations.
+
+## Modeling and Evaluation
+- Methods: filter → aggregate → pivot anomalies
+- Validation: test against known scenarios
+
+## Conclusion
+A small query library speeds up triage.
+**Next steps:** add sample datasets and screenshots.
+
+## Artifacts
+- `/queries/failed_logins.sql` (Coming Soon)
+- `/queries/new_admins.sql` (Coming Soon)
+- `/queries/blocked_ips.sql` (Coming Soon)
