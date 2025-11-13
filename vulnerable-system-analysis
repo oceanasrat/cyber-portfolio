@@ -1,0 +1,17 @@
+# Vulnerable System Analysis — Findings & Mitigation
+
+## Project Introduction
+Assessment of a deliberately vulnerable host/service with CVE references.
+
+## Modeling and Evaluation
+- Tools: Nmap+NSE, Nikto, searchsploit, NVD
+- Prioritization: CVSS + exploitability + business impact
+
+## Conclusion
+Top risks identified with clear remediation steps.
+**Next steps:** add PoC and hardening checklist.
+
+## Artifacts
+- `/scans/` (Coming Soon)
+- `/evidence/` (Coming Soon)
+- `/report.pdf` (Coming Soon)
