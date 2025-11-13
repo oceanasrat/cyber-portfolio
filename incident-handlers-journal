@@ -1,0 +1,16 @@
+# Incident Handler’s Journal — IR Case Notes
+
+## Project Introduction
+Timelines, indicators, and actions using an IR framework (identify → contain → eradicate → recover).
+
+## Modeling and Evaluation
+- Tools: SIEM (simulated), Sysinternals, Zeek/Suricata, Python
+- Metrics: dwell time, MTTD/MTTR, false positives
+
+## Conclusion
+Playbooks + timelines reduce confusion under pressure.
+**Next steps:** publish brute-force SSH and suspicious PowerShell cases.
+
+## Artifacts
+- `/cases/` (Coming Soon)
+- `/playbooks/` (Coming Soon)
