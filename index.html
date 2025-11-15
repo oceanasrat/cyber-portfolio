@@ -1,16 +1,64 @@
 <!doctype html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Wykiyanos — Cybersecurity Portfolio</title>
   <meta name="description" content="SOC analyst–in–training. Hands-on labs, evidence pack, and Google Cybersecurity certificates." />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Canonical (edit if your Pages URL differs) -->
+  <link rel="canonical" href="https://oceanasrat.github.io/cyber-portfolio/" />
+
+  <!-- Social cards -->
+  <meta property="og:title" content="Wykiyanos — Cybersecurity Portfolio">
+  <meta property="og:description" content="SOC analyst–in–training. Hands-on labs, evidence pack, and Google Cybersecurity certificates.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://oceanasrat.github.io/cyber-portfolio/">
+  <meta property="og:image" content="https://oceanasrat.github.io/cyber-portfolio/og-card.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Wykiyanos",
+    "email":"mailto:wykiyanosa@gmail.com",
+    "url":"https://oceanasrat.github.io/cyber-portfolio/",
+    "sameAs":["https://github.com/oceanasrat"]
+  }
+  </script>
+
+  <!-- Prefetch likely internal pages (safe no-op if missing) -->
+  <link rel="prefetch" href="./tryhackme.html" as="document">
+  <link rel="prefetch" href="./incident.html" as="document">
+  <link rel="prefetch" href="./vuln.html" as="document">
+  <link rel="prefetch" href="./sql.html" as="document">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>try{document.documentElement.classList.add('dark')}catch(e){}</script>
+
+  <!-- Theme boot: set dark/light before first paint -->
+  <script>
+    (function () {
+      try {
+        const ls = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const dark = ls ? ls === 'dark' : prefersDark;
+        document.documentElement.classList.toggle('dark', dark);
+      } catch (e) {}
+    })();
+  </script>
+
   <style>
+    /* your tokens + effects */
     :root{--neon:#22d3ee}
     .neon{box-shadow:0 0 0 .5px rgba(34,211,238,.55),0 0 16px rgba(34,211,238,.28)}
     .grad{
@@ -19,25 +67,34 @@
         radial-gradient(900px 500px at 100% -10%, rgba(99,102,241,.10), transparent 60%),
         radial-gradient(1100px 640px at 50% 120%, rgba(16,185,129,.10), transparent 60%);
     }
-    /* subtle animated border ring */
-    .ring-animated{
-      position: relative;
-    }
+    .ring-animated{ position: relative; }
     .ring-animated::before{
       content:"";
       position:absolute; inset:-1px; z-index:-1; border-radius:16px;
       background: conic-gradient(from 180deg, rgba(34,211,238,.4), rgba(99,102,241,.35), rgba(16,185,129,.35), rgba(34,211,238,.4));
       filter: blur(10px); opacity:.25;
     }
+    /* reduced motion overrides Tailwind's scroll-smooth */
+    @media (prefers-reduced-motion: reduce){
+      .scroll-smooth{ scroll-behavior: auto !important; }
+    }
+    /* utility for screen-reader-only (Tailwind's sr-only will work too, but keep this for robustness) */
+    .focusable-skip:focus{
+      position:absolute; left:0.5rem; top:0.5rem;
+      background:#0891b2; color:white; padding:.375rem .75rem; border-radius:.5rem; z-index:50;
+    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-200 font-[Inter] grad selection:bg-cyan-500/30">
 
+  <!-- Skip link -->
+  <a href="#content" class="sr-only focus:not-sr-only focusable-skip">Skip to content</a>
+
   <!-- NAV -->
   <header class="sticky top-0 z-40 backdrop-blur bg-slate-950/60 border-b border-white/5">
-    <nav class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+    <nav class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between" aria-label="Primary">
       <a href="#" class="text-cyan-300 font-extrabold tracking-tight">WYKIYANOS<span class="text-slate-400"> · CYBER</span></a>
-      <div class="hidden sm:flex gap-6 text-slate-300">
+      <div class="hidden sm:flex gap-6 text-slate-300" id="navLinks">
         <a href="#projects" class="hover:text-white">Projects</a>
         <a href="#evidence" class="hover:text-white">Evidence</a>
         <a href="#skills" class="hover:text-white">Skills</a>
@@ -45,31 +102,35 @@
         <a href="#certs" class="hover:text-white">Certs</a>
         <a href="#contact" class="hover:text-white">Contact</a>
       </div>
-      <a href="./resume.pdf" target="_blank" rel="noopener"
-         class="px-3 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-500/30 neon">
-        Resume
-      </a>
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" type="button" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10" aria-label="Toggle color theme">Toggle theme</button>
+        <a href="./resume.pdf" target="_blank" rel="noopener"
+           class="px-3 py-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-500/30 neon">
+          Resume
+        </a>
+      </div>
     </nav>
   </header>
 
-  <!-- HERO -->
-  <section class="mx-auto max-w-7xl px-4 pt-14 pb-10">
-    <div class="grid md:grid-cols-2 gap-10 items-center">
-      <div data-reveal class="opacity-0 translate-y-6">
-        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow glow">Cybersecurity Portfolio</h1>
-        <p class="mt-3 text-slate-300">
-          SOC analyst–in–training · <span class="text-cyan-300">Python</span>, Linux, SQL, Wireshark, Nmap.
-          Focus on detection, response, and automation.
-        </p>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href="#projects" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">View Projects</a>
-          <a href="./resume.pdf" target="_blank" rel="noopener"
-             class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Open Resume</a>
+  <main id="content" tabindex="-1">
+    <!-- HERO -->
+    <section class="mx-auto max-w-7xl px-4 pt-14 pb-10">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div data-reveal class="opacity-0 translate-y-6">
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow glow">Cybersecurity Portfolio</h1>
+          <p class="mt-3 text-slate-300">
+            SOC analyst–in–training · <span class="text-cyan-300">Python</span>, Linux, SQL, Wireshark, Nmap.
+            Focus on detection, response, and automation.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#projects" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">View Projects</a>
+            <a href="./resume.pdf" target="_blank" rel="noopener"
+               class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Open Resume</a>
+          </div>
         </div>
-      </div>
-      <div class="relative" data-reveal>
-        <div class="absolute -inset-2 blur-3xl bg-cyan-500/20 rounded-full"></div>
-        <div class="relative rounded-2xl border border-white/10 p-6 neon bg-slate-900/60">
+        <div class="relative" data-reveal>
+          <div class="absolute -inset-2 blur-3xl bg-cyan-500/20 rounded-full"></div>
+          <div class="relative rounded-2xl border border-white/10 p-6 neon bg-slate-900/60">
 <pre class="text-xs md:text-sm leading-relaxed"><code># demo: tiny Python log parser
 from collections import Counter
 import re
@@ -78,281 +139,319 @@ with open('auth.log') as f:
            for m in re.finditer(r'(?:\d{1,3}\.){3}\d{1,3}', line)
            if 'Failed password' in line]
 print(Counter(ips).most_common(5))</code></pre>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- PROJECTS -->
-  <section id="projects" class="mx-auto max-w-7xl px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">Assignment Artifacts</h2>
-    <p class="text-slate-400 mb-6">Placeholders now—evidence will be linked as I complete labs.</p>
+    <!-- PROJECTS -->
+    <section id="projects" class="mx-auto max-w-7xl px-4 py-8">
+      <h2 class="text-2xl font-bold mb-4">Assignment Artifacts</h2>
+      <p class="text-slate-400 mb-6">Placeholders now—evidence will be linked as I complete labs.</p>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- Card template repeated -->
-      <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
-        <div class="text-cyan-300 font-semibold">TryHackMe Journal</div>
-        <p class="mt-2 text-sm text-slate-400">Room notes, flags, lessons learned.</p>
-        <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
-        <div class="mt-4 flex gap-2">
-          <a href="./tryhackme.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
-          <a href="https://github.com/oceanasrat/thm-journal" target="_blank" rel="noopener"
-             class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
-        </div>
-      </article>
-
-      <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
-        <div class="text-cyan-300 font-semibold">Incident Handler’s Journal</div>
-        <p class="mt-2 text-sm text-slate-400">IR notes, timelines, indicators.</p>
-        <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
-        <div class="mt-4 flex gap-2">
-          <a href="./incident.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
-          <a href="https://github.com/oceanasrat/incident-handlers-journal" target="_blank" rel="noopener"
-             class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
-        </div>
-      </article>
-
-      <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
-        <div class="text-cyan-300 font-semibold">Vulnerable System Analysis</div>
-        <p class="mt-2 text-sm text-slate-400">Findings, severity, mitigation.</p>
-        <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
-        <div class="mt-4 flex gap-2">
-          <a href="./vuln.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
-          <a href="https://github.com/oceanasrat/vulnerable-system-analysis" target="_blank" rel="noopener"
-             class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
-        </div>
-      </article>
-
-      <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
-        <div class="text-cyan-300 font-semibold">SQL Query</div>
-        <p class="mt-2 text-sm text-slate-400">Sample investigation queries.</p>
-        <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
-        <div class="mt-4 flex gap-2">
-          <a href="./sql.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
-          <a href="https://github.com/oceanasrat/sql-investigation-queries" target="_blank" rel="noopener"
-             class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- EVIDENCE LABS (wider, animated) -->
-  <section id="evidence" class="mx-auto max-w-7xl px-4 py-10">
-    <h2 class="text-2xl font-bold mb-4">Evidence Labs</h2>
-    <p class="text-slate-400 mb-6">
-      Hands-on artifacts created at home (safe sample data): a tiny Linux log parser, phishing-header triage notes,
-      and investigator KQL/SQL queries.
-    </p>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
-        <div class="flex items-start gap-3">
-          <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
-          <div>
-            <h3 class="text-cyan-200 font-semibold">Linux auth.log analysis</h3>
-            <p class="text-slate-400 text-sm mt-1">Counts failed SSH logins by source IP (demo parser output).</p>
-            <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Card template repeated -->
+        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
+          <div class="text-cyan-300 font-semibold">TryHackMe Journal</div>
+          <p class="mt-2 text-sm text-slate-400">Room notes, flags, lessons learned.</p>
+          <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
+          <div class="mt-4 flex gap-2">
+            <a href="./tryhackme.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
+            <a href="https://github.com/oceanasrat/thm-journal" target="_blank" rel="noopener"
+               class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
-        <div class="flex items-start gap-3">
-          <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
-          <div>
-            <h3 class="text-cyan-200 font-semibold">Phishing header checklist</h3>
-            <p class="text-slate-400 text-sm mt-1">Steps to inspect Received-SPF/DKIM/DMARC and risky URLs.</p>
-            <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
+          <div class="text-cyan-300 font-semibold">Incident Handler’s Journal</div>
+          <p class="mt-2 text-sm text-slate-400">IR notes, timelines, indicators.</p>
+          <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
+          <div class="mt-4 flex gap-2">
+            <a href="./incident.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
+            <a href="https://github.com/oceanasrat/incident-handlers-journal" target="_blank" rel="noopener"
+               class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
-        <div class="flex items-start gap-3">
-          <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
-          <div>
-            <h3 class="text-cyan-200 font-semibold">KQL / SQL investigator queries</h3>
-            <p class="text-slate-400 text-sm mt-1">Quick filters for failed logons, new admins, and rare processes.</p>
-            <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
+          <div class="text-cyan-300 font-semibold">Vulnerable System Analysis</div>
+          <p class="mt-2 text-sm text-slate-400">Findings, severity, mitigation.</p>
+          <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
+          <div class="mt-4 flex gap-2">
+            <a href="./vuln.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
+            <a href="https://github.com/oceanasrat/vulnerable-system-analysis" target="_blank" rel="noopener"
+               class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
           </div>
-        </div>
-      </article>
-    </div>
+        </article>
 
-    <div class="mt-6 flex flex-wrap gap-3">
-      <a href="./wykiyanos-cyber-artifacts.zip"
-         class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Download Evidence Pack (ZIP)</a>
-      <a href="https://github.com/oceanasrat/cyber-portfolio" target="_blank" rel="noopener"
-         class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">View code on GitHub →</a>
-    </div>
-  </section>
+        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
+          <div class="text-cyan-300 font-semibold">SQL Query</div>
+          <p class="mt-2 text-sm text-slate-400">Sample investigation queries.</p>
+          <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
+          <div class="mt-4 flex gap-2">
+            <a href="./sql.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
+            <a href="https://github.com/oceanasrat/sql-investigation-queries" target="_blank" rel="noopener"
+               class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
+          </div>
+        </article>
+      </div>
+    </section>
 
-  <!-- SKILLS -->
-  <section id="skills" class="mx-auto max-w-7xl px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">Skills & Tools</h2>
-    <div class="flex flex-wrap gap-2">
-      <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Python</span>
-      <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Linux</span>
-      <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">SQL</span>
-      <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Wireshark</span>
-      <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Nmap</span>
-      <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Git & GitHub</span>
-      <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Regex</span>
-      <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">SIEM (basics)</span>
-    </div>
-  </section>
+    <!-- EVIDENCE LABS -->
+    <section id="evidence" class="mx-auto max-w-7xl px-4 py-10">
+      <h2 class="text-2xl font-bold mb-4">Evidence Labs</h2>
+      <p class="text-slate-400 mb-6">
+        Hands-on artifacts created at home (safe sample data): a tiny Linux log parser, phishing-header triage notes,
+        and investigator KQL/SQL queries.
+      </p>
 
-  <!-- PROGRESS -->
-  <section id="progress" class="mx-auto max-w-7xl px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">Course Progress</h2>
-    <ol class="space-y-2 text-slate-300 list-decimal list-inside">
-      <li><span class="text-white font-semibold">Foundations of Cybersecurity</span> — ✅ Completed</li>
-      <li><span class="text-white font-semibold">Manage Security Risks</span> — ✅ Completed</li>
-      <li>Networks & Network Security</li>
-      <li>Linux & SQL</li>
-      <li>Assets, Threats, and Vulnerabilities</li>
-      <li>Detection & Response</li>
-      <li>Automate Cybersecurity Tasks with Python</li>
-      <li>Prepare for Cybersecurity Jobs</li>
-      <li>Accelerate Your Job Search with AI</li>
-    </ol>
-  </section>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
+            <div>
+              <h3 class="text-cyan-200 font-semibold">Linux auth.log analysis</h3>
+              <p class="text-slate-400 text-sm mt-1">Counts failed SSH logins by source IP (demo parser output).</p>
+              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+            </div>
+          </div>
+        </article>
 
-  <!-- CERTIFICATIONS -->
-  <section id="certs" class="mx-auto max-w-7xl px-4 py-8">
-    <h2 class="text-2xl font-bold mb-4">Certifications</h2>
+        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
+            <div>
+              <h3 class="text-cyan-200 font-semibold">Phishing header checklist</h3>
+              <p class="text-slate-400 text-sm mt-1">Steps to inspect Received-SPF/DKIM/DMARC and risky URLs.</p>
+              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+            </div>
+          </div>
+        </article>
 
-    <div class="grid md:grid-cols-2 gap-6">
-      <!-- #1 -->
-      <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
-        <img data-cert src="./cert-foundations.JPG" alt="Google Foundations of Cybersecurity"
-             class="w-full rounded-xl border border-white/10 bg-slate-900/50 object-contain cursor-zoom-in">
-        <header class="mt-3">
-          <h3 class="text-lg font-semibold text-cyan-200">Google — Foundations of Cybersecurity</h3>
-          <p class="text-slate-300">Completed Nov 13, 2025</p>
-        </header>
-        <div class="mt-3 flex flex-wrap gap-3">
-          <a href="https://coursera.org/share/81fcbeb9103f2c8098a9b43299f61444" target="_blank" rel="noopener"
-             class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Verify credential</a>
-          <button type="button" class="skills-toggle px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200"
-                  data-target="skills-foundations" data-label="View skills (12)">View skills (12)</button>
-        </div>
-        <ul id="skills-foundations" class="hidden mt-4 flex flex-wrap gap-2 text-sm">
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Security Management</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cyber Attacks</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Data Ethics</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Security Controls</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">SIEM (basics)</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cyber Security Strategy</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Network Analysis</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Information Assurance</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cybersecurity</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cyber Risk</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Incident Response</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Ethical Standards & Conduct</li>
-        </ul>
-      </article>
+        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
+            <div>
+              <h3 class="text-cyan-200 font-semibold">KQL / SQL investigator queries</h3>
+              <p class="text-slate-400 text-sm mt-1">Quick filters for failed logons, new admins, and rare processes.</p>
+              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+            </div>
+          </div>
+        </article>
+      </div>
 
-      <!-- #2 -->
-      <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
-        <img data-cert src="./cert-manage-risks.JPG" alt="Play It Safe: Manage Security Risks"
-             class="w-full rounded-xl border border-white/10 bg-slate-900/50 object-contain cursor-zoom-in">
-        <header class="mt-3">
-          <h3 class="text-lg font-semibold text-cyan-200">Google — Play It Safe: Manage Security Risks</h3>
-          <p class="text-slate-300">Completed Nov 15, 2025</p>
-        </header>
-        <div class="mt-3 flex flex-wrap gap-3">
-          <a href="https://coursera.org/share/c862eeacaf75100d6cc64422c5eacd09" target="_blank" rel="noopener"
-             class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Verify credential</a>
-          <button type="button" class="skills-toggle px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200"
-                  data-target="skills-risks" data-label="View skills (12)">View skills (12)</button>
-        </div>
-        <ul id="skills-risks" class="hidden mt-4 flex flex-wrap gap-2 text-sm">
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Security Management</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Continuous Monitoring</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Risk Management</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">SIEM (basics)</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Threat Detection</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Threat Management</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Enterprise Security</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Vulnerability Management</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Auditing</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cybersecurity</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Risk Analysis</li>
-          <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Incident Response</li>
-        </ul>
-      </article>
-    </div>
-  </section>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="./wykiyanos-cyber-artifacts.zip"
+           class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Download Evidence Pack (ZIP)</a>
+        <a href="https://github.com/oceanasrat/cyber-portfolio" target="_blank" rel="noopener"
+           class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">View code on GitHub →</a>
+      </div>
+    </section>
 
-  <!-- CONTACT -->
-  <section id="contact" class="mx-auto max-w-7xl px-4 py-10">
-    <h2 class="text-2xl font-bold mb-4">Contact</h2>
-    <p>Email: <a class="text-cyan-300 underline" href="mailto:wykiyanosa@gmail.com">wykiyanosa@gmail.com</a></p>
-    <p class="text-slate-400 text-sm mt-2">Dallas–Fort Worth • Available for entry-level security roles, SOC analyst internships, or freelance hardening tasks.</p>
-  </section>
+    <!-- SKILLS -->
+    <section id="skills" class="mx-auto max-w-7xl px-4 py-8">
+      <h2 class="text-2xl font-bold mb-4">Skills & Tools</h2>
+      <div class="flex flex-wrap gap-2">
+        <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Python</span>
+        <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Linux</span>
+        <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">SQL</span>
+        <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Wireshark</span>
+        <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Nmap</span>
+        <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Git & GitHub</span>
+        <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">Regex</span>
+        <span class="px-3 py-1.5 text-sm rounded-xl bg-white/5 border border-white/10">SIEM (basics)</span>
+      </div>
+    </section>
+
+    <!-- PROGRESS -->
+    <section id="progress" class="mx-auto max-w-7xl px-4 py-8">
+      <h2 class="text-2xl font-bold mb-4">Course Progress</h2>
+      <ol class="space-y-2 text-slate-300 list-decimal list-inside">
+        <li><span class="text-white font-semibold">Foundations of Cybersecurity</span> — ✅ Completed</li>
+        <li><span class="text-white font-semibold">Manage Security Risks</span> — ✅ Completed</li>
+        <li>Networks & Network Security</li>
+        <li>Linux & SQL</li>
+        <li>Assets, Threats, and Vulnerabilities</li>
+        <li>Detection & Response</li>
+        <li>Automate Cybersecurity Tasks with Python</li>
+        <li>Prepare for Cybersecurity Jobs</li>
+        <li>Accelerate Your Job Search with AI</li>
+      </ol>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section id="certs" class="mx-auto max-w-7xl px-4 px-4 py-8">
+      <h2 class="text-2xl font-bold mb-4">Certifications</h2>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- #1 -->
+        <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
+          <img data-cert src="./cert-foundations.JPG" alt="Google Foundations of Cybersecurity certificate"
+               loading="lazy" decoding="async"
+               class="w-full rounded-xl border border-white/10 bg-slate-900/50 object-contain cursor-zoom-in">
+          <header class="mt-3">
+            <h3 class="text-lg font-semibold text-cyan-200">Google — Foundations of Cybersecurity</h3>
+            <p class="text-slate-300">Completed Nov 13, 2025</p>
+          </header>
+          <div class="mt-3 flex flex-wrap gap-3">
+            <a href="https://coursera.org/share/81fcbeb9103f2c8098a9b43299f61444" target="_blank" rel="noopener"
+               class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Verify credential</a>
+            <button type="button" class="skills-toggle px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200"
+                    data-target="skills-foundations" data-label="View skills (12)" aria-controls="skills-foundations" aria-expanded="false">View skills (12)</button>
+          </div>
+          <ul id="skills-foundations" class="hidden mt-4 flex flex-wrap gap-2 text-sm">
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Security Management</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cyber Attacks</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Data Ethics</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Security Controls</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">SIEM (basics)</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cyber Security Strategy</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Network Analysis</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Information Assurance</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cybersecurity</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cyber Risk</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Incident Response</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Ethical Standards & Conduct</li>
+          </ul>
+        </article>
+
+        <!-- #2 -->
+        <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
+          <img data-cert src="./cert-manage-risks.JPG" alt="Play It Safe: Manage Security Risks certificate"
+               loading="lazy" decoding="async"
+               class="w-full rounded-xl border border-white/10 bg-slate-900/50 object-contain cursor-zoom-in">
+          <header class="mt-3">
+            <h3 class="text-lg font-semibold text-cyan-200">Google — Play It Safe: Manage Security Risks</h3>
+            <p class="text-slate-300">Completed Nov 15, 2025</p>
+          </header>
+          <div class="mt-3 flex flex-wrap gap-3">
+            <a href="https://coursera.org/share/c862eeacaf75100d6cc64422c5eacd09" target="_blank" rel="noopener"
+               class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Verify credential</a>
+            <button type="button" class="skills-toggle px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-200"
+                    data-target="skills-risks" data-label="View skills (12)" aria-controls="skills-risks" aria-expanded="false">View skills (12)</button>
+          </div>
+          <ul id="skills-risks" class="hidden mt-4 flex flex-wrap gap-2 text-sm">
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Security Management</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Continuous Monitoring</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Risk Management</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">SIEM (basics)</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Threat Detection</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Threat Management</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Enterprise Security</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Vulnerability Management</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Auditing</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Cybersecurity</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Risk Analysis</li>
+            <li class="px-2.5 py-1 rounded-xl bg-white/5 border border-white/10">Incident Response</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="mx-auto max-w-7xl px-4 py-10">
+      <h2 class="text-2xl font-bold mb-4">Contact</h2>
+      <p>Email: <a class="text-cyan-300 underline" href="mailto:wykiyanosa@gmail.com">wykiyanosa@gmail.com</a></p>
+      <p class="text-slate-400 text-sm mt-2">Dallas–Fort Worth • Available for entry-level security roles, SOC analyst internships, or freelance hardening tasks.</p>
+    </section>
+  </main>
 
   <footer class="border-t border-white/5 py-6 text-center text-slate-500 text-sm">
     © <span id="y"></span> Wykiyanos — Built with Tailwind • Hosted on GitHub Pages
   </footer>
 
-  <!-- Fullscreen lightbox -->
-  <div id="lightbox" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50">
+  <!-- Fullscreen lightbox (accessible) -->
+  <div id="lightbox" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50"
+       role="dialog" aria-modal="true" aria-hidden="true" aria-label="Certificate viewer">
     <button id="closeLb" class="absolute top-4 right-4 px-3 py-1.5 rounded-md bg-white/10 border border-white/20 text-white hover:bg-white/20">✕</button>
     <img id="lbImg" alt="Certificate" class="max-w-[95vw] max-h-[90vh] rounded-md border border-white/10">
   </div>
 
   <!-- Scripts -->
   <script>
-    // Footer year
-    document.getElementById('y').textContent = new Date().getFullYear();
-
-    // Lightbox for any <img data-cert>
+    // Theme toggle
     (function () {
-      const box = document.getElementById('lightbox');
-      const img = document.getElementById('lbImg');
-      const close = document.getElementById('closeLb');
-      function openBox(src){ img.src = src; box.classList.remove('hidden'); box.classList.add('flex'); }
-      function closeBox(){ box.classList.add('hidden'); box.classList.remove('flex'); img.removeAttribute('src'); }
-      document.querySelectorAll('img[data-cert]').forEach(el=>{
-        el.addEventListener('click', ()=>openBox(el.currentSrc||el.src));
+      const tBtn = document.getElementById('themeToggle');
+      if (tBtn) tBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
       });
-      close.addEventListener('click', closeBox);
-      box.addEventListener('click', e=>{ if(e.target===box) closeBox(); });
-      document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeBox(); });
     }());
 
-    // Toggle "View skills" / "Hide skills"
-    document.querySelectorAll('.skills-toggle').forEach(btn=>{
+    // Footer year
+    (function(){ const y=document.getElementById('y'); if(y) y.textContent=new Date().getFullYear(); }());
+
+    // Lightbox with focus trap
+    (function () {
+      const box = document.getElementById('lightbox'); if (!box) return;
+      const img = document.getElementById('lbImg');
+      const close = document.getElementById('closeLb');
+      let lastFocus = null;
+      function openBox(src) {
+        lastFocus = document.activeElement;
+        img.src = src;
+        box.classList.remove('hidden'); box.classList.add('flex');
+        box.setAttribute('aria-hidden', 'false');
+        close.focus();
+      }
+      function closeBox() {
+        box.classList.add('hidden'); box.classList.remove('flex');
+        box.setAttribute('aria-hidden', 'true');
+        img.removeAttribute('src');
+        if (lastFocus) lastFocus.focus();
+      }
+      document.querySelectorAll('img[data-cert]').forEach(el => {
+        el.addEventListener('click', () => openBox(el.currentSrc || el.src));
+      });
+      close.addEventListener('click', closeBox);
+      box.addEventListener('click', e => { if (e.target === box) closeBox(); });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeBox();
+        if (e.key === 'Tab' && !box.classList.contains('hidden')) {
+          // basic trap: keep focus on close button
+          e.preventDefault(); close.focus();
+        }
+      });
+    }());
+
+    // Toggle "View skills" / "Hide skills" + ARIA
+    document.querySelectorAll('.skills-toggle').forEach(btn => {
       const id = btn.getAttribute('data-target');
       const label = btn.getAttribute('data-label') || 'View skills';
       const box = document.getElementById(id);
-      btn.addEventListener('click', ()=>{
+      if (!box) return;
+      btn.setAttribute('aria-controls', id);
+      btn.setAttribute('aria-expanded', 'false');
+      btn.addEventListener('click', () => {
         const hidden = box.classList.contains('hidden');
         box.classList.toggle('hidden');
         btn.textContent = hidden ? 'Hide skills' : label;
+        btn.setAttribute('aria-expanded', String(hidden));
       });
     });
 
-    // Scroll-reveal (fade & rise once)
+    // Scroll-reveal (respects reduced motion)
     (function(){
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReduced) return;
       const els = document.querySelectorAll('[data-reveal]');
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-          if(e.isIntersecting){
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
             e.target.classList.remove('opacity-0','translate-y-6');
             e.target.classList.add('opacity-100','translate-y-0','transition','duration-700');
             io.unobserve(e.target);
           }
         });
-      },{threshold:.15});
-      els.forEach(el=>io.observe(el));
+      }, { threshold: .15 });
+      els.forEach(el => io.observe(el));
     }());
 
-    // Tiny hover-tilt (desktop only)
+    // Tiny hover-tilt (desktop only; respects reduced motion)
     (function(){
       const supportsPointer = window.matchMedia('(pointer:fine)').matches;
-      if(!supportsPointer) return;
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!supportsPointer || prefersReduced) return;
       document.querySelectorAll('[data-tilt]').forEach(card=>{
         let rAF=null;
         function onMove(e){
@@ -366,6 +465,24 @@ print(Counter(ips).most_common(5))</code></pre>
         card.addEventListener('mousemove',onMove);
         card.addEventListener('mouseleave',reset);
       });
+    }());
+
+    // Active nav state (aria-current) while scrolling
+    (function(){
+      const links = Array.from(document.querySelectorAll('#navLinks a'));
+      const map = new Map(links.map(a => [a.getAttribute('href'), a]));
+      const sections = links
+        .map(a => document.querySelector(a.getAttribute('href')))
+        .filter(Boolean);
+      const setActive = (id) => {
+        links.forEach(a => a.removeAttribute('aria-current'));
+        const link = map.get('#'+id);
+        if (link) link.setAttribute('aria-current','page');
+      };
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+      }, { rootMargin: "-40% 0px -50% 0px", threshold: 0.01 });
+      sections.forEach(s => io.observe(s));
     }());
   </script>
 </body>
