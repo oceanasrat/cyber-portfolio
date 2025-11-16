@@ -7,8 +7,9 @@
   <title>Wykiyanos — Cybersecurity Portfolio</title>
   <meta name="description" content="SOC analyst–in–training. Hands-on labs, evidence pack, and Google Cybersecurity certificates." />
   <meta name="theme-color" content="#0f172a" />
+  <meta name="color-scheme" content="dark light" />
 
-  <!-- Canonical (edit if your Pages URL differs) -->
+  <!-- Canonical -->
   <link rel="canonical" href="https://oceanasrat.github.io/cyber-portfolio/" />
 
   <!-- Social cards -->
@@ -31,7 +32,7 @@
   }
   </script>
 
-  <!-- Prefetch likely internal pages (safe no-op if missing) -->
+  <!-- Prefetch likely internal pages -->
   <link rel="prefetch" href="./tryhackme.html" as="document">
   <link rel="prefetch" href="./incident.html" as="document">
   <link rel="prefetch" href="./vuln.html" as="document">
@@ -58,7 +59,6 @@
   </script>
 
   <style>
-    /* your tokens + effects */
     :root{--neon:#22d3ee}
     .neon{box-shadow:0 0 0 .5px rgba(34,211,238,.55),0 0 16px rgba(34,211,238,.28)}
     .grad{
@@ -74,11 +74,10 @@
       background: conic-gradient(from 180deg, rgba(34,211,238,.4), rgba(99,102,241,.35), rgba(16,185,129,.35), rgba(34,211,238,.4));
       filter: blur(10px); opacity:.25;
     }
-    /* reduced motion overrides Tailwind's scroll-smooth */
+    .glow{ text-shadow: 0 0 24px rgba(34,211,238,.35) }
     @media (prefers-reduced-motion: reduce){
       .scroll-smooth{ scroll-behavior: auto !important; }
     }
-    /* utility for screen-reader-only (Tailwind's sr-only will work too, but keep this for robustness) */
     .focusable-skip:focus{
       position:absolute; left:0.5rem; top:0.5rem;
       background:#0891b2; color:white; padding:.375rem .75rem; border-radius:.5rem; z-index:50;
@@ -117,7 +116,7 @@
     <section class="mx-auto max-w-7xl px-4 pt-14 pb-10">
       <div class="grid md:grid-cols-2 gap-10 items-center">
         <div data-reveal class="opacity-0 translate-y-6">
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight drop-shadow glow">Cybersecurity Portfolio</h1>
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight glow">Cybersecurity Portfolio</h1>
           <p class="mt-3 text-slate-300">
             SOC analyst–in–training · <span class="text-cyan-300">Python</span>, Linux, SQL, Wireshark, Nmap.
             Focus on detection, response, and automation.
@@ -150,7 +149,7 @@ print(Counter(ips).most_common(5))</code></pre>
       <p class="text-slate-400 mb-6">Placeholders now—evidence will be linked as I complete labs.</p>
 
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Card template repeated -->
+        <!-- Card 1 -->
         <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
           <div class="text-cyan-300 font-semibold">TryHackMe Journal</div>
           <p class="mt-2 text-sm text-slate-400">Room notes, flags, lessons learned.</p>
@@ -162,6 +161,7 @@ print(Counter(ips).most_common(5))</code></pre>
           </div>
         </article>
 
+        <!-- Card 2 -->
         <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
           <div class="text-cyan-300 font-semibold">Incident Handler’s Journal</div>
           <p class="mt-2 text-sm text-slate-400">IR notes, timelines, indicators.</p>
@@ -173,6 +173,7 @@ print(Counter(ips).most_common(5))</code></pre>
           </div>
         </article>
 
+        <!-- Card 3 -->
         <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
           <div class="text-cyan-300 font-semibold">Vulnerable System Analysis</div>
           <p class="mt-2 text-sm text-slate-400">Findings, severity, mitigation.</p>
@@ -184,6 +185,7 @@ print(Counter(ips).most_common(5))</code></pre>
           </div>
         </article>
 
+        <!-- Card 4 -->
         <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
           <div class="text-cyan-300 font-semibold">SQL Query</div>
           <p class="mt-2 text-sm text-slate-400">Sample investigation queries.</p>
@@ -240,6 +242,33 @@ print(Counter(ips).most_common(5))</code></pre>
         </article>
       </div>
 
+      <!-- Optional: tools row (uncomment if you added these files) -->
+      <!--
+      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
+          <div class="text-cyan-300 font-semibold">PhishLens — Header Analyzer</div>
+          <p class="mt-2 text-sm text-slate-400">SPF/DKIM/DMARC checks, domain mismatch, URL detection, JSON/PDF export.</p>
+          <div class="mt-4 flex gap-2">
+            <a href="./phishlens.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
+          </div>
+        </article>
+        <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
+          <div class="text-cyan-300 font-semibold">BluePulse — Log Analyzer</div>
+          <p class="mt-2 text-sm text-slate-400">auth.log & Windows Security CSV → attacker IPs, bursts, hourly histogram, admin signals.</p>
+          <div class="mt-4 flex gap-2">
+            <a href="./bluepulse.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
+          </div>
+        </article>
+        <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
+          <div class="text-cyan-300 font-semibold">ATT&CK Coverage Mapper</div>
+          <p class="mt-2 text-sm text-slate-400">Track technique coverage (Detect/Alert/Contain), add notes, export JSON/PDF.</p>
+          <div class="mt-4 flex gap-2">
+            <a href="./attackmap.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
+          </div>
+        </article>
+      </div>
+      -->
+
       <div class="mt-6 flex flex-wrap gap-3">
         <a href="./wykiyanos-cyber-artifacts.zip"
            class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Download Evidence Pack (ZIP)</a>
@@ -280,7 +309,7 @@ print(Counter(ips).most_common(5))</code></pre>
     </section>
 
     <!-- CERTIFICATIONS -->
-    <section id="certs" class="mx-auto max-w-7xl px-4 px-4 py-8">
+    <section id="certs" class="mx-auto max-w-7xl px-4 py-8">
       <h2 class="text-2xl font-bold mb-4">Certifications</h2>
 
       <div class="grid md:grid-cols-2 gap-6">
@@ -408,7 +437,6 @@ print(Counter(ips).most_common(5))</code></pre>
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape') closeBox();
         if (e.key === 'Tab' && !box.classList.contains('hidden')) {
-          // basic trap: keep focus on close button
           e.preventDefault(); close.focus();
         }
       });
