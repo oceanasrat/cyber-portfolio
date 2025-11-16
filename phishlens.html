@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PhishLens — Email Header Analyzer</title>
+  <meta name="description" content="Client-side phishing header analyzer: SPF/DKIM/DMARC verdicts, domain mismatch, URL extraction, and evidence export." />
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>try{document.documentElement.classList.add('dark')}catch(e){}</script>
+  <style>
+    :root{--neon:#22d3ee}
+    .neon{box-shadow:0 0 0 .5px rgba(34,211,238,.6),0 0 16px rgba(34,211,238,.35)}
+    .grad{background-image:
+      radial-gradient(800px 400px at 0% 0%, rgba(34,211,238,.12), transparent 60%),
+      radial-gradient(800px 400px at 100% 0%, rgba(99,102,241,.10), transparent 60%),
+      radial-gradient(1000px 600px at 50% 120%, rgba(16,185,129,.08), transparent 60%)}
+    .pill{display:inline-block;padding:.2rem .55rem;border-radius:.75rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05)}
+    @media print {.no-print{display:none!important}}
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-[Inter] grad">
+  <!-- NAV -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-slate-950/70 border-b border-white/5 no-print">
+    <nav class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <div class="text-cyan-300 font-extrabold tracking-tight">PHISHLENS<span class="text-slate-400"> · by Wykiyanos</span></div>
+      <div class="hidden sm:flex gap-6 text-slate-300">
+        <a href="/" class="hover:text-white">← Back to Portfolio</a>
+        <a href="#how" class="hover:text-white">How it works</a>
+        <a href="#faq" class="hover:text-white">FAQ</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-6">
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+          PhishLens <span class="text-cyan-300">Email Header Analyzer</span>
+        </h1>
+        <p class="mt-3 text-slate-300">Paste raw email headers. Get an instant risk score, SPF/DKIM/DMARC verdicts, domain mismatches, URL extraction, and a clean report you can export to JSON or PDF.
+        All client-side. No data leaves your browser.</p>
+        <div class="mt-6 flex flex-wrap gap-3 no-print">
+          <button id="btnSample" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">Load sample header</button>
+          <button id="btnClear" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Clear</button>
+        </div>
+      </div>
+      <div class="relative">
+        <div class="absolute -inset-2 blur-3xl bg-cyan-500/20 rounded-full"></div>
+        <div class="relative rounded-2xl border border-white/10 p-6 neon bg-slate-900/60">
+<pre class="text-xs leading-relaxed"><code># score signals
+- SPF / DKIM / DMARC
+- From vs Return-Path
+- Reply-To / domain swap
+- Suspicious URLs
+- Received chain anomalies
+- Free-mail senders</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOL -->
+  <section class="mx-auto max-w-6xl px-4 pb-8">
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 neon">
+        <label for="headers" class="block text-sm text-slate-400 mb-2">Paste raw headers here</label>
+        <textarea id="headers" rows="16" class="w-full rounded-xl bg-slate-950/50 border border-white/10 p-3 outline-none focus:ring-2 focus:ring-cyan-500" placeholder="From: ...&#10;Return-Path: ...&#10;Authentication-Results: spf=pass dkim=pass dmarc=pass; ..."></textarea>
+
+        <label for="body" class="block text-sm text-slate-400 mt-4 mb-2">Optional: paste body (for URL checks)</label>
+        <textarea id="body" rows="6" class="w-full rounded-xl bg-slate-950/50 border border-white/10 p-3 outline-none focus:ring-2 focus:ring-cyan-500" placeholder="(Optional) Paste body or suspicious URLs"></textarea>
+
+        <div class="mt-4 flex flex-wrap gap-3 no-print">
+          <button id="btnAnalyze" class="px-4 py-2 rounded-xl bg-emerald-400/20 text-emerald-200 border border-emerald-400/40 hover:bg-emerald-400/30">Analyze</button>
+          <button id="btnCopy" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Copy JSON</button>
+          <button id="btnDownload" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Download JSON</button>
+          <button id="btnPrint" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Save as PDF (Print)</button>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 neon">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-cyan-200">Results</h3>
+          <div id="scorePill" class="pill text-sm">score: —</div>
+        </div>
+
+        <div id="verdict" class="mt-3 text-xl font-bold">Awaiting analysis…</div>
+
+        <div class="mt-4 grid sm:grid-cols-2 gap-3">
+          <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+            <div class="text-sm text-slate-400">Authentication</div>
+            <div id="authTable" class="mt-2 text-sm"></div>
+          </div>
+          <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+            <div class="text-sm text-slate-400">Identity & Mismatch</div>
+            <div id="idTable" class="mt-2 text-sm"></div>
+          </div>
+          <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+            <div class="text-sm text-slate-400">URLs Detected</div>
+            <ul id="urlList" class="mt-2 text-sm space-y-1"></ul>
+          </div>
+          <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+            <div class="text-sm text-slate-400">Received Chain</div>
+            <ul id="recvList" class="mt-2 text-sm space-y-1"></ul>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <div class="text-sm text-slate-400 mb-1">Recommended actions</div>
+          <ul id="actions" class="list-disc list-inside text-sm space-y-1"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="how" class="mx-auto max-w-6xl px-4 pb-10">
+    <h2 class="text-2xl font-bold mb-4">How it works</h2>
+    <p class="text-slate-300">Client-side rules check SPF/DKIM/DMARC, domain mismatches (From vs Return-Path/Reply-To),
+      URL extraction, and anomalies in the <code>Received:</code> chain. The score is weighted; higher = more risky.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-white/5 py-6 text-center text-slate-500 text-sm no-print">
+    © <span id="y"></span> Wykiyanos — PhishLens • Hosted on GitHub Pages
+  </footer>
+
+<script>
+const el = (h,t) => { const d=document.createElement(h); if(t) d.textContent=t; return d; };
+const getDom = (v='') => (v||'').trim().split('@').pop()||'';
+const domEq = (a,b) => a && b && a.toLowerCase()===b.toLowerCase();
+const freeMail = ['gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','aol.com','proton.me','protonmail.com','yandex.com','mail.com'];
+const urlRe = /\bhttps?:\/\/[^\s"'<>)]+/ig;
+
+function parseHeaders(raw){
+  const o={}; raw.split(/\r?\n/).forEach(line=>{
+    const m=line.match(/^([\w-]+):\s*(.*)$/);
+    if(m){ const k=m[1].toLowerCase(); o[k]=(o[k]?o[k]+' ':'')+m[2].trim(); }
+    else if(line.match(/^\s+/) && o._last){ o[o._last]+=' '+line.trim(); }
+    o._last = m?m[1].toLowerCase():o._last;
+  }); delete o._last; return o;
+}
+
+function authVerdicts(authRes){
+  const v={spf:'unknown',dkim:'unknown',dmarc:'unknown'};
+  if(!authRes) return v;
+  ['spf','dkim','dmarc'].forEach(k=>{
+    const m=authRes.match(new RegExp(k+'=(pass|fail|none|neutral|softfail)','i'));
+    if(m) v[k]=m[1].toLowerCase();
+  }); return v;
+}
+
+function analyze(){
+  const headers = document.getElementById('headers').value;
+  const body = document.getElementById('body').value||'';
+  const h = parseHeaders(headers);
+
+  const from=h['from']||'', ret=h['return-path']||'', rpto=h['reply-to']||'';
+  const auth=h['authentication-results']||h['received-spf']||'';
+  const authV=authVerdicts(auth);
+
+  const fromDom=getDom((from.match(/<(.*?)>/)||[])[1] || from.split(' ').pop());
+  const retDom=getDom((ret.match(/<(.*?)>/)||[])[1] || ret);
+  const rpDom =getDom((rpto.match(/<(.*?)>/)||[])[1] || rpto);
+
+  const recvLines=(headers.match(/^received:.*$/gim)||[]).map(s=>s.replace(/^received:\s*/i,''));
+  const urls=(body.match(urlRe)||[]).slice(0,20);
+
+  // scoring
+  let score=0; const reasons=[];
+  const bad = v=>['fail','softfail','neutral','none','unknown'].includes(v);
+  if(bad(authV.spf)){score+=20; reasons.push('SPF not passed');}
+  if(bad(authV.dkim)){score+=25; reasons.push('DKIM not passed');}
+  if(bad(authV.dmarc)){score+=25; reasons.push('DMARC not passed');}
+  if(fromDom && retDom && !domEq(fromDom,retDom)){score+=15; reasons.push(`From (${fromDom}) ≠ Return-Path (${retDom})`);}
+  if(fromDom && rpDom  && !domEq(fromDom,rpDom )){score+=10; reasons.push(`From (${fromDom}) ≠ Reply-To (${rpDom})`);}
+  if(freeMail.includes(fromDom)){score+=8; reasons.push('Free-mail sender (could be legit or phish)');}
+  if(urls.length){score+=urls.length>3?10:5; reasons.push(`${urls.length} URL(s) in body`);}
+  // received anomalies (very simple heuristics)
+  const priv = /(?:10\.\d+\.\d+\.\d+|192\.168\.\d+\.\d+|172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+)/;
+  if(recvLines.some(l=>priv.test(l))){score+=5; reasons.push('Private IP seen in Received chain (could be internal relay)');}
+
+  // verdict text
+  let verdict='Likely benign';
+  if(score>=60) verdict='High risk — likely phishing';
+  else if(score>=35) verdict='Suspicious — investigate';
+
+  // DOM updates
+  document.getElementById('verdict').textContent = verdict;
+  const pill=document.getElementById('scorePill'); pill.textContent = 'score: '+score;
+  pill.style.background = score>=60?'rgba(239,68,68,.15)':score>=35?'rgba(245,158,11,.15)':'rgba(16,185,129,.15)';
+  pill.style.borderColor = score>=60?'rgba(239,68,68,.35)':score>=35?'rgba(245,158,11,.35)':'rgba(16,185,129,.35)';
+
+  const authTable=document.getElementById('authTable'); authTable.innerHTML='';
+  [['SPF',authV.spf],['DKIM',authV.dkim],['DMARC',authV.dmarc]].forEach(([k,v])=>{
+    const p=el('div'); p.innerHTML=`<span class="pill">${k}</span> <span class="ml-2">${v}</span>`;
+    authTable.appendChild(p);
+  });
+
+  const idTable=document.getElementById('idTable'); idTable.innerHTML='';
+  const rows=[
+    ['From', from || '—'],
+    ['Return-Path', ret || '—'],
+    ['Reply-To', rpto || '—'],
+    ['From domain', fromDom || '—'],
+    ['Return-Path domain', retDom || '—'],
+    ['Reply-To domain', rpDom || '—'],
+  ];
+  rows.forEach(([k,v])=>{ const p=el('div'); p.innerHTML=`<span class="pill">${k}</span> <span class="ml-2 break-all">${v}</span>`; idTable.appendChild(p); });
+
+  const urlList=document.getElementById('urlList'); urlList.innerHTML='';
+  if(urls.length===0){ urlList.appendChild(el('li','(none detected)')); }
+  else urls.forEach(u=>{ const li=el('li'); li.innerHTML=`<code class="break-all">${u}</code>`; urlList.appendChild(li); });
+
+  const recvList=document.getElementById('recvList'); recvList.innerHTML='';
+  if(recvLines.length===0){ recvList.appendChild(el('li','(no Received lines found)')); }
+  else recvLines.slice(0,10).forEach(l=>{ const li=el('li'); li.textContent=l; recvList.appendChild(li); });
+
+  const actions=document.getElementById('actions'); actions.innerHTML='';
+  const acts=[
+    'Isolate the message; do not click links.',
+    'Contact sender via a known-good channel if business-critical.',
+    'If suspicious: capture full headers, save EML, and block domains/URLs.',
+    'Search SIEM: failed logins from sender IP or URL beaconing.',
+  ];
+  if(score>=35) acts.unshift('Open an investigation ticket and record IOCs.');
+  acts.forEach(a=>{ const li=el('li'); li.textContent=a; actions.appendChild(li); });
+
+  // return JSON object for export
+  return {
+    verdict, score, reasons,
+    auth: authV, from, return_path: ret, reply_to: rpto,
+    domains: {from: fromDom, return_path: retDom, reply_to: rpDom},
+    urls, received: recvLines.slice(0,20),
+    created_at: new Date().toISOString()
+  };
+}
+
+function downloadJSON(obj, name='phishlens-report.json'){
+  const b = new Blob([JSON.stringify(obj,null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+
+const sampleHeader = `From: "Payroll Update" <notice@payr0ll-support.com>
+Return-Path: bounce@mail-payroll-secure.com
+Reply-To: helpdesk.payroll@gmail.com
+Authentication-Results: example.com; spf=fail smtp.mailfrom=mail-payroll-secure.com; dkim=none; dmarc=fail
+Received: from 192.168.10.5 by mx.example.com with ESMTPS id abc123
+Received: from mail-payroll-secure.com (203.0.113.55) by relay.example.net with ESMTP id def456`;
+
+let lastJSON=null;
+document.getElementById('y').textContent=new Date().getFullYear();
+document.getElementById('btnAnalyze').onclick=()=>{ lastJSON=analyze(); };
+document.getElementById('btnCopy').onclick=()=>{ if(!lastJSON) lastJSON=analyze(); navigator.clipboard.writeText(JSON.stringify(lastJSON,null,2)); };
+document.getElementById('btnDownload').onclick=()=>{ if(!lastJSON) lastJSON=analyze(); downloadJSON(lastJSON); };
+document.getElementById('btnPrint').onclick=()=>{ if(!lastJSON) lastJSON=analyze(); window.print(); };
+document.getElementById('btnSample').onclick=()=>{ document.getElementById('headers').value=sampleHeader; document.getElementById('body').value='https://payr0ll-update.com/reset'; };
+document.getElementById('btnClear').onclick=()=>{ ['headers','body'].forEach(id=>document.getElementById(id).value=''); document.getElementById('verdict').textContent='Awaiting analysis…'; document.getElementById('scorePill').textContent='score: —'; };
+</script>
+</body>
+</html>
