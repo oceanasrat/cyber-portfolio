@@ -8,8 +8,9 @@
   <meta name="description" content="SOC analyst–in–training. Hands-on labs, evidence pack, and Google Cybersecurity certificates." />
   <meta name="theme-color" content="#0f172a" />
   <meta name="color-scheme" content="dark light" />
+  <meta name="referrer" content="strict-origin-when-cross-origin">
 
-  <!-- Canonical -->
+  <!-- Canonical (edit if your Pages URL differs) -->
   <link rel="canonical" href="https://oceanasrat.github.io/cyber-portfolio/" />
 
   <!-- Social cards -->
@@ -18,7 +19,9 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://oceanasrat.github.io/cyber-portfolio/">
   <meta property="og:image" content="https://oceanasrat.github.io/cyber-portfolio/og-card.png">
+  <meta property="og:image:alt" content="Wykiyanos cybersecurity portfolio cover">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image:alt" content="Wykiyanos cybersecurity portfolio cover">
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -38,6 +41,12 @@
   <link rel="prefetch" href="./vuln.html" as="document">
   <link rel="prefetch" href="./sql.html" as="document">
 
+  <!-- Favicons & manifest (optional: add files to repo root) -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +54,7 @@
 
   <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Optional pin: <script src="https://cdn.tailwindcss.com/3.4.10"></script> -->
 
   <!-- Theme boot: set dark/light before first paint -->
   <script>
@@ -59,6 +69,7 @@
   </script>
 
   <style>
+    /* brand tokens + effects */
     :root{--neon:#22d3ee}
     .neon{box-shadow:0 0 0 .5px rgba(34,211,238,.55),0 0 16px rgba(34,211,238,.28)}
     .grad{
@@ -75,6 +86,8 @@
       filter: blur(10px); opacity:.25;
     }
     .glow{ text-shadow: 0 0 24px rgba(34,211,238,.35) }
+
+    /* accessibility niceties */
     @media (prefers-reduced-motion: reduce){
       .scroll-smooth{ scroll-behavior: auto !important; }
     }
@@ -82,9 +95,34 @@
       position:absolute; left:0.5rem; top:0.5rem;
       background:#0891b2; color:white; padding:.375rem .75rem; border-radius:.5rem; z-index:50;
     }
+
+    /* active nav styling (ARIA-driven) */
+    #navLinks a[aria-current="page"]{
+      color: white;
+      text-decoration: underline;
+      text-underline-offset: 6px;
+    }
+
+    /* container queries: cards reveal extra details when wider than 420px */
+    .cq-card{ container-type: inline-size; }
+    .cq-extra{ display: none; }
+    @container (min-width: 420px){
+      .cq-extra{ display:flex; flex-wrap: wrap; gap:.375rem; margin-top:.5rem; }
+    }
+
+    /* Horizontal rails: mask edges for a subtle fade */
+    .edge-fade {
+      -webkit-mask-image: linear-gradient(90deg, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
+              mask-image: linear-gradient(90deg, transparent 0, black 24px, black calc(100% - 24px), transparent 100%);
+    }
+
+    /* Improve default font fallback if Inter fails */
+    body{ font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji",
+          "Segoe UI Emoji"; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-200 font-[Inter] grad selection:bg-cyan-500/30">
+<body class="bg-slate-950 text-slate-200 grad">
 
   <!-- Skip link -->
   <a href="#content" class="sr-only focus:not-sr-only focusable-skip">Skip to content</a>
@@ -92,8 +130,9 @@
   <!-- NAV -->
   <header class="sticky top-0 z-40 backdrop-blur bg-slate-950/60 border-b border-white/5">
     <nav class="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between" aria-label="Primary">
-      <a href="#" class="text-cyan-300 font-extrabold tracking-tight">WYKIYANOS<span class="text-slate-400"> · CYBER</span></a>
+      <a href="./" class="text-cyan-300 font-extrabold tracking-tight">WYKIYANOS<span class="text-slate-400"> · CYBER</span></a>
       <div class="hidden sm:flex gap-6 text-slate-300" id="navLinks">
+        <a href="#showcase" class="hover:text-white">Showcase</a>
         <a href="#projects" class="hover:text-white">Projects</a>
         <a href="#evidence" class="hover:text-white">Evidence</a>
         <a href="#skills" class="hover:text-white">Skills</a>
@@ -122,9 +161,8 @@
             Focus on detection, response, and automation.
           </p>
           <div class="mt-6 flex flex-wrap gap-3">
-            <a href="#projects" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">View Projects</a>
-            <a href="./resume.pdf" target="_blank" rel="noopener"
-               class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Open Resume</a>
+            <a href="#showcase" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">See Showcase</a>
+            <a href="#projects" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">View Projects</a>
           </div>
         </div>
         <div class="relative" data-reveal>
@@ -143,168 +181,237 @@ print(Counter(ips).most_common(5))</code></pre>
       </div>
     </section>
 
-    <!-- PROJECTS -->
-    <section id="projects" class="mx-auto max-w-7xl px-4 py-8">
-      <h2 class="text-2xl font-bold mb-4">Assignment Artifacts</h2>
-      <p class="text-slate-400 mb-6">Placeholders now—evidence will be linked as I complete labs.</p>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Card 1 -->
-        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
-          <div class="text-cyan-300 font-semibold">TryHackMe Journal</div>
-          <p class="mt-2 text-sm text-slate-400">Room notes, flags, lessons learned.</p>
-          <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
-          <div class="mt-4 flex gap-2">
-            <a href="./tryhackme.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
-            <a href="https://github.com/oceanasrat/thm-journal" target="_blank" rel="noopener"
-               class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
+    <!-- SHOWCASE (Horizontal rail with scroll-snap) -->
+    <section id="showcase" class="bg-slate-950/40 border-y border-white/5">
+      <div class="mx-auto max-w-7xl px-4 py-8">
+        <header class="flex items-center justify-between gap-4 mb-3">
+          <h2 class="text-2xl font-bold">Showcase</h2>
+          <div class="hidden sm:flex gap-2">
+            <button type="button" class="rail-btn-prev px-2 py-1 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10" aria-label="Scroll showcase left">⟵</button>
+            <button type="button" class="rail-btn-next px-2 py-1 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10" aria-label="Scroll showcase right">⟶</button>
           </div>
-        </article>
+        </header>
 
-        <!-- Card 2 -->
-        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
-          <div class="text-cyan-300 font-semibold">Incident Handler’s Journal</div>
-          <p class="mt-2 text-sm text-slate-400">IR notes, timelines, indicators.</p>
-          <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
-          <div class="mt-4 flex gap-2">
-            <a href="./incident.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
-            <a href="https://github.com/oceanasrat/incident-handlers-journal" target="_blank" rel="noopener"
-               class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
-          </div>
-        </article>
+        <div id="railShowcase"
+             class="edge-fade flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2"
+             role="region" aria-label="Featured projects">
+          <!-- each slide -->
+          <article class="min-w-[85vw] sm:min-w-[28rem] snap-start rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 neon ring-animated cq-card">
+            <div class="text-cyan-300 font-semibold">Linux auth.log analysis</div>
+            <p class="mt-2 text-sm text-slate-400">Counts failed SSH logins by source IP; quick triage for brute-force.</p>
+            <div class="cq-extra text-xs">
+              <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Python</span>
+              <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Regex</span>
+              <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Counter</span>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <a href="#evidence" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">Details</a>
+              <a href="./wykiyanos-cyber-artifacts.zip" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">ZIP →</a>
+            </div>
+          </article>
 
-        <!-- Card 3 -->
-        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
-          <div class="text-cyan-300 font-semibold">Vulnerable System Analysis</div>
-          <p class="mt-2 text-sm text-slate-400">Findings, severity, mitigation.</p>
-          <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
-          <div class="mt-4 flex gap-2">
-            <a href="./vuln.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
-            <a href="https://github.com/oceanasrat/vulnerable-system-analysis" target="_blank" rel="noopener"
-               class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
-          </div>
-        </article>
+          <article class="min-w-[85vw] sm:min-w-[28rem] snap-start rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 neon ring-animated cq-card">
+            <div class="text-cyan-300 font-semibold">Phishing header checklist</div>
+            <p class="mt-2 text-sm text-slate-400">SPF/DKIM/DMARC, sender domain mismatch, and risky URL detection.</p>
+            <div class="cq-extra text-xs">
+              <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Mail headers</span>
+              <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">SPF/DKIM/DMARC</span>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <a href="#evidence" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">Details</a>
+            </div>
+          </article>
 
-        <!-- Card 4 -->
-        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
-          <div class="text-cyan-300 font-semibold">SQL Query</div>
-          <p class="mt-2 text-sm text-slate-400">Sample investigation queries.</p>
-          <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
-          <div class="mt-4 flex gap-2">
-            <a href="./sql.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
-            <a href="https://github.com/oceanasrat/sql-investigation-queries" target="_blank" rel="noopener"
-               class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
-          </div>
-        </article>
+          <article class="min-w-[85vw] sm:min-w-[28rem] snap-start rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 neon ring-animated cq-card">
+            <div class="text-cyan-300 font-semibold">KQL / SQL investigator queries</div>
+            <p class="mt-2 text-sm text-slate-400">Filters for failed logons, rare processes, and new admins.</p>
+            <div class="cq-extra text-xs">
+              <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">KQL</span>
+              <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">SQL</span>
+              <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">SIEM</span>
+            </div>
+            <div class="mt-4 flex gap-2">
+              <a href="#evidence" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">Details</a>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
-    <!-- EVIDENCE LABS -->
-    <section id="evidence" class="mx-auto max-w-7xl px-4 py-10">
-      <h2 class="text-2xl font-bold mb-4">Evidence Labs</h2>
-      <p class="text-slate-400 mb-6">
-        Hands-on artifacts created at home (safe sample data): a tiny Linux log parser, phishing-header triage notes,
-        and investigator KQL/SQL queries.
-      </p>
+    <!-- CONTENT BAND: sticky Quick Jump + Projects -->
+    <section class="mx-auto max-w-7xl px-4 py-8 grid lg:grid-cols-[16rem,1fr] gap-8">
+      <!-- Sticky quick-jump (desktop only) -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 rounded-xl border border-white/10 p-4 bg-slate-900/60">
+          <h3 class="text-sm font-semibold text-slate-200">Quick jump</h3>
+          <nav class="mt-3 grid gap-2 text-sm">
+            <a href="#projects" class="text-slate-300 hover:text-white">Projects</a>
+            <a href="#evidence" class="text-slate-300 hover:text-white">Evidence</a>
+            <a href="#skills" class="text-slate-300 hover:text-white">Skills</a>
+            <a href="#progress" class="text-slate-300 hover:text-white">Progress</a>
+            <a href="#certs" class="text-slate-300 hover:text-white">Certs</a>
+            <a href="#contact" class="text-slate-300 hover:text-white">Contact</a>
+          </nav>
+        </div>
+      </aside>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
-          <div class="flex items-start gap-3">
-            <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
-            <div>
-              <h3 class="text-cyan-200 font-semibold">Linux auth.log analysis</h3>
-              <p class="text-slate-400 text-sm mt-1">Counts failed SSH logins by source IP (demo parser output).</p>
-              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
-            </div>
-          </div>
-        </article>
+      <!-- Right column content -->
+      <div>
+        <!-- PROJECTS -->
+        <section id="projects" class="py-2">
+          <h2 class="text-2xl font-bold mb-4">Assignment Artifacts</h2>
+          <p class="text-slate-400 mb-6">Placeholders now—evidence will be linked as I complete labs.</p>
 
-        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
-          <div class="flex items-start gap-3">
-            <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
-            <div>
-              <h3 class="text-cyan-200 font-semibold">Phishing header checklist</h3>
-              <p class="text-slate-400 text-sm mt-1">Steps to inspect Received-SPF/DKIM/DMARC and risky URLs.</p>
-              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
-            </div>
-          </div>
-        </article>
+          <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <!-- Card 1 -->
+            <article data-tilt data-reveal class="cq-card opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
+              <div class="text-cyan-300 font-semibold">TryHackMe Journal</div>
+              <p class="mt-2 text-sm text-slate-400">Room notes, flags, lessons learned.</p>
+              <div class="cq-extra text-xs">
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Linux</span>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Nmap</span>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Wireshark</span>
+              </div>
+              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
+              <div class="mt-4 flex gap-2">
+                <a href="./tryhackme.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
+                <a href="https://github.com/oceanasrat/thm-journal" target="_blank" rel="noopener"
+                   class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
+              </div>
+            </article>
 
-        <article data-tilt data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
-          <div class="flex items-start gap-3">
-            <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
-            <div>
-              <h3 class="text-cyan-200 font-semibold">KQL / SQL investigator queries</h3>
-              <p class="text-slate-400 text-sm mt-1">Quick filters for failed logons, new admins, and rare processes.</p>
-              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
-            </div>
-          </div>
-        </article>
-      </div>
+            <!-- Card 2 -->
+            <article data-tilt data-reveal class="cq-card opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
+              <div class="text-cyan-300 font-semibold">Incident Handler’s Journal</div>
+              <p class="mt-2 text-sm text-slate-400">IR notes, timelines, indicators.</p>
+              <div class="cq-extra text-xs">
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">TTPs</span>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">IOCs</span>
+              </div>
+              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
+              <div class="mt-4 flex gap-2">
+                <a href="./incident.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
+                <a href="https://github.com/oceanasrat/incident-handlers-journal" target="_blank" rel="noopener"
+                   class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
+              </div>
+            </article>
 
-      <!-- Optional: tools row (uncomment if you added these files) -->
-      <!--
-      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
-          <div class="text-cyan-300 font-semibold">PhishLens — Header Analyzer</div>
-          <p class="mt-2 text-sm text-slate-400">SPF/DKIM/DMARC checks, domain mismatch, URL detection, JSON/PDF export.</p>
-          <div class="mt-4 flex gap-2">
-            <a href="./phishlens.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
-          </div>
-        </article>
-        <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
-          <div class="text-cyan-300 font-semibold">BluePulse — Log Analyzer</div>
-          <p class="mt-2 text-sm text-slate-400">auth.log & Windows Security CSV → attacker IPs, bursts, hourly histogram, admin signals.</p>
-          <div class="mt-4 flex gap-2">
-            <a href="./bluepulse.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
-          </div>
-        </article>
-        <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
-          <div class="text-cyan-300 font-semibold">ATT&CK Coverage Mapper</div>
-          <p class="mt-2 text-sm text-slate-400">Track technique coverage (Detect/Alert/Contain), add notes, export JSON/PDF.</p>
-          <div class="mt-4 flex gap-2">
-            <a href="./attackmap.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
-          </div>
-        </article>
-      </div>
-      -->
+            <!-- Card 3 -->
+            <article data-tilt data-reveal class="cq-card opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
+              <div class="text-cyan-300 font-semibold">Vulnerable System Analysis</div>
+              <p class="mt-2 text-sm text-slate-400">Findings, severity, mitigation.</p>
+              <div class="cq-extra text-xs">
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">CVSS</span>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Mitre ATT&CK</span>
+              </div>
+              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
+              <div class="mt-4 flex gap-2">
+                <a href="./vuln.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
+                <a href="https://github.com/oceanasrat/vulnerable-system-analysis" target="_blank" rel="noopener"
+                   class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
+              </div>
+            </article>
 
-      <div class="mt-6 flex flex-wrap gap-3">
-        <a href="./wykiyanos-cyber-artifacts.zip"
-           class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Download Evidence Pack (ZIP)</a>
-        <a href="https://github.com/oceanasrat/cyber-portfolio" target="_blank" rel="noopener"
-           class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">View code on GitHub →</a>
+            <!-- Card 4 -->
+            <article data-tilt data-reveal class="cq-card opacity-0 translate-y-6 rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition ring-animated">
+              <div class="text-cyan-300 font-semibold">SQL Query</div>
+              <p class="mt-2 text-sm text-slate-400">Sample investigation queries.</p>
+              <div class="cq-extra text-xs">
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">SQL</span>
+                <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10">Joins</span>
+              </div>
+              <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-yellow-400/20 text-yellow-300 border border-yellow-400/40">Coming Soon</span>
+              <div class="mt-4 flex gap-2">
+                <a href="./sql.html" class="text-xs px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">View page</a>
+                <a href="https://github.com/oceanasrat/sql-investigation-queries" target="_blank" rel="noopener"
+                   class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">GitHub repo →</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- EVIDENCE LABS -->
+        <section id="evidence" class="py-10">
+          <h2 class="text-2xl font-bold mb-4">Evidence Labs</h2>
+          <p class="text-slate-400 mb-6">
+            Hands-on artifacts created at home (safe sample data): a tiny Linux log parser, phishing-header triage notes,
+            and investigator KQL/SQL queries.
+          </p>
+
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated md:col-span-2">
+              <div class="flex items-start gap-3">
+                <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
+                <div>
+                  <h3 class="text-cyan-200 font-semibold">Linux auth.log analysis</h3>
+                  <p class="text-slate-400 text-sm mt-1">Counts failed SSH logins by source IP (demo parser output).</p>
+                  <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+                </div>
+              </div>
+            </article>
+
+            <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
+              <div class="flex items-start gap-3">
+                <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
+                <div>
+                  <h3 class="text-cyan-200 font-semibold">Phishing header checklist</h3>
+                  <p class="text-slate-400 text-sm mt-1">Steps to inspect Received-SPF/DKIM/DMARC and risky URLs.</p>
+                  <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+                </div>
+              </div>
+            </article>
+
+            <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 hover:bg-slate-900 transition neon ring-animated">
+              <div class="flex items-start gap-3">
+                <span class="mt-0.5 inline-block w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/40"></span>
+                <div>
+                  <h3 class="text-cyan-200 font-semibold">KQL / SQL investigator queries</h3>
+                  <p class="text-slate-400 text-sm mt-1">Quick filters for failed logons, new admins, and rare processes.</p>
+                  <span class="mt-3 inline-block text-xs px-2 py-1 rounded bg-white/5 border border-white/10">Included in ZIP</span>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="./wykiyanos-cyber-artifacts.zip"
+               class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Download Evidence Pack (ZIP)</a>
+            <a href="https://github.com/oceanasrat/cyber-portfolio" target="_blank" rel="noopener"
+               class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">View code on GitHub →</a>
+          </div>
+        </section>
+
+        <!-- TOOLS (inside container for consistent spacing) -->
+        <section class="py-8">
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
+              <div class="text-cyan-300 font-semibold">PhishLens — Header Analyzer</div>
+              <p class="mt-2 text-sm text-slate-400">SPF/DKIM/DMARC verdicts, domain mismatch, URL detection, JSON/PDF export.</p>
+              <div class="mt-4 flex gap-2">
+                <a href="./phishlens.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
+              </div>
+            </article>
+
+            <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
+              <div class="text-cyan-300 font-semibold">BluePulse — Log Analyzer</div>
+              <p class="mt-2 text-sm text-slate-400">Linux auth.log & Windows Security CSV → attacker IPs, bursts, hourly histogram, admin signals.</p>
+              <div class="mt-4 flex gap-2">
+                <a href="./bluepulse.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
+              </div>
+            </article>
+
+            <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
+              <div class="text-cyan-300 font-semibold">ATT&CK Coverage Mapper</div>
+              <p class="mt-2 text-sm text-slate-400">Track technique coverage (Detect/Alert/Contain), attach KQL/Sigma notes, export JSON/PDF.</p>
+              <div class="mt-4 flex gap-2">
+                <a href="./attackmap.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
     </section>
-<!-- Tools grid row -->
-<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-  <!-- PhishLens -->
-  <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
-    <div class="text-cyan-300 font-semibold">PhishLens — Header Analyzer</div>
-    <p class="mt-2 text-sm text-slate-400">SPF/DKIM/DMARC verdicts, domain mismatch, URL detection, JSON/PDF export.</p>
-    <div class="mt-4 flex gap-2">
-      <a href="./phishlens.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
-    </div>
-  </article>
 
-  <!-- BluePulse -->
-  <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
-    <div class="text-cyan-300 font-semibold">BluePulse — Log Analyzer</div>
-    <p class="mt-2 text-sm text-slate-400">Linux auth.log & Windows Security CSV → attacker IPs, bursts, hourly histogram, admin signals.</p>
-    <div class="mt-4 flex gap-2">
-      <a href="./bluepulse.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
-    </div>
-  </article>
-
-  <!-- ATT&CK Mapper -->
-  <article class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 hover:bg-slate-900 neon transition">
-    <div class="text-cyan-300 font-semibold">ATT&CK Coverage Mapper</div>
-    <p class="mt-2 text-sm text-slate-400">Track technique coverage (Detect/Alert/Contain), attach KQL/Sigma notes, export JSON/PDF.</p>
-    <div class="mt-4 flex gap-2">
-      <a href="./attackmap.html" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30">Open tool</a>
-    </div>
-  </article>
-</div>
     <!-- SKILLS -->
     <section id="skills" class="mx-auto max-w-7xl px-4 py-8">
       <h2 class="text-2xl font-bold mb-4">Skills & Tools</h2>
@@ -336,15 +443,15 @@ print(Counter(ips).most_common(5))</code></pre>
       </ol>
     </section>
 
-    <!-- CERTIFICATIONS -->
+    <!-- CERTIFICATIONS (scroll-snap gallery on mobile) -->
     <section id="certs" class="mx-auto max-w-7xl px-4 py-8">
       <h2 class="text-2xl font-bold mb-4">Certifications</h2>
 
-      <div class="grid md:grid-cols-2 gap-6">
+      <div class="sm:grid sm:grid-cols-2 sm:gap-6 flex overflow-x-auto gap-4 snap-x snap-mandatory pb-2">
         <!-- #1 -->
-        <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
+        <article data-reveal class="min-w-[85vw] sm:min-w-0 snap-start opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
           <img data-cert src="./cert-foundations.JPG" alt="Google Foundations of Cybersecurity certificate"
-               loading="lazy" decoding="async"
+               width="1200" height="848" loading="lazy" decoding="async"
                class="w-full rounded-xl border border-white/10 bg-slate-900/50 object-contain cursor-zoom-in">
           <header class="mt-3">
             <h3 class="text-lg font-semibold text-cyan-200">Google — Foundations of Cybersecurity</h3>
@@ -373,9 +480,9 @@ print(Counter(ips).most_common(5))</code></pre>
         </article>
 
         <!-- #2 -->
-        <article data-reveal class="opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
+        <article data-reveal class="min-w-[85vw] sm:min-w-0 snap-start opacity-0 translate-y-6 rounded-2xl border border-white/10 p-6 bg-slate-900/60 neon">
           <img data-cert src="./cert-manage-risks.JPG" alt="Play It Safe: Manage Security Risks certificate"
-               loading="lazy" decoding="async"
+               width="1200" height="848" loading="lazy" decoding="async"
                class="w-full rounded-xl border border-white/10 bg-slate-900/50 object-contain cursor-zoom-in">
           <header class="mt-3">
             <h3 class="text-lg font-semibold text-cyan-200">Google — Play It Safe: Manage Security Risks</h3>
@@ -539,6 +646,18 @@ print(Counter(ips).most_common(5))</code></pre>
         entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
       }, { rootMargin: "-40% 0px -50% 0px", threshold: 0.01 });
       sections.forEach(s => io.observe(s));
+    }());
+
+    // Showcase rail buttons
+    (function(){
+      const rail = document.getElementById('railShowcase');
+      if(!rail) return;
+      const prev = document.querySelector('.rail-btn-prev');
+      const next = document.querySelector('.rail-btn-next');
+      const smoothOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const scrollByAmt = () => Math.min(rail.clientWidth * 0.9, 560);
+      if(prev) prev.addEventListener('click', () => rail.scrollBy({left: -scrollByAmt(), behavior: smoothOK?'smooth':'auto'}));
+      if(next) next.addEventListener('click', () => rail.scrollBy({left:  scrollByAmt(), behavior: smoothOK?'smooth':'auto'}));
     }());
   </script>
 </body>
