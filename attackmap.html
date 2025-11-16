@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ATT&CK Coverage Mapper</title>
+  <meta name="description" content="Mark your MITRE ATT&CK technique coverage with statuses and notes. Export JSON or print a PDF report." />
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>try{document.documentElement.classList.add('dark')}catch(e){}</script>
+  <style>
+    :root{--neon:#22d3ee}
+    .neon{box-shadow:0 0 0 .5px rgba(34,211,238,.55),0 0 16px rgba(34,211,238,.28)}
+    .st{border:1px solid rgba(255,255,255,.12);border-radius:.6rem;background:rgba(255,255,255,.04);padding:.25rem .5rem;font-size:.8rem}
+    .s0{background:rgba(148,163,184,.18)} /* Not Covered */
+    .s1{background:rgba(250,204,21,.18)}  /* Detect */
+    .s2{background:rgba(34,197,94,.18)}   /* Alerted */
+    .s3{background:rgba(59,130,246,.18)}  /* Contained */
+    @media print {.no-print{display:none!important}}
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-[Inter] selection:bg-cyan-500/20">
+  <header class="sticky top-0 z-30 backdrop-blur bg-slate-950/70 border-b border-white/5 no-print">
+    <nav class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <div class="text-cyan-300 font-extrabold tracking-tight">ATT&CK COVERAGE<span class="text-slate-400"> · by Wykiyanos</span></div>
+      <div class="hidden sm:flex gap-6 text-slate-300">
+        <a href="/" class="hover:text-white">← Back to Portfolio</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="mx-auto max-w-6xl px-4 pt-8 pb-6">
+    <h1 class="text-3xl md:text-4xl font-extrabold">ATT&CK Coverage Mapper</h1>
+    <p class="mt-2 text-slate-300">Select common Enterprise techniques you can detect today, set a coverage level, and attach notes/queries/links.
+      Export JSON or print a PDF for your Evidence ZIP.</p>
+
+    <div class="mt-4 flex flex-wrap gap-3 no-print">
+      <button id="btnLoad" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">Load starter set</button>
+      <button id="btnAdd" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Add custom technique</button>
+      <button id="btnJson" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Download JSON</button>
+      <button id="btnPrint" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Save as PDF (Print)</button>
+      <button id="btnClear" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Clear</button>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 pb-10">
+    <div id="grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  </section>
+
+  <footer class="border-t border-white/5 py-6 text-center text-slate-500 text-sm no-print">
+    © <span id="y"></span> Wykiyanos — Coverage Mapper • Hosted on GitHub Pages
+  </footer>
+
+<script>
+const grid = document.getElementById('grid');
+const el = (h,t)=>{const d=document.createElement(h); if(t!=null)d.textContent=t; return d;};
+const now = ()=>new Date().toISOString();
+
+let data = []; // {tid,name,status,notes,updated}
+
+const statuses = [
+  {v:0, name:'Not Covered', cls:'s0'},
+  {v:1, name:'Detect', cls:'s1'},
+  {v:2, name:'Alerted', cls:'s2'},
+  {v:3, name:'Contained', cls:'s3'},
+];
+
+function card(t){
+  const {tid,name,status=0,notes=''} = t;
+  const wrap=el('article'); wrap.className='rounded-2xl border border-white/10 p-4 bg-slate-900/60 neon';
+  const head=el('div'); head.className='flex items-start justify-between gap-3';
+  const left=el('div');
+  left.append(el('div', `${tid} — ${name}`)); left.firstChild.className='font-semibold text-cyan-200';
+  const right=el('div'); right.className='flex gap-2 items-center';
+  const sel=el('select'); sel.className='st '+statuses[status].cls;
+  statuses.forEach(s=>{ const o=el('option', s.name); o.value=s.v; if(s.v===status) o.selected=true; sel.appendChild(o); });
+  right.append(sel);
+  head.append(left,right);
+
+  const ta=el('textarea'); ta.className='w-full mt-3 rounded-xl bg-slate-950/50 border border-white/10 p-3 outline-none focus:ring-2 focus:ring-cyan-500';
+  ta.rows=5; ta.placeholder='Notes / queries / links…'; ta.value=notes;
+
+  const small=el('div'); small.className='text-xs text-slate-500 mt-2';
+  small.textContent='Tip: add KQL/Sigma/Splunk queries or links to repo/case notes.';
+
+  wrap.append(head, ta, small);
+
+  sel.onchange=()=>{ t.status=Number(sel.value); sel.className='st '+statuses[t.status].cls; t.updated=now(); save(); };
+  ta.oninput =()=>{ t.notes=ta.value; t.updated=now(); save(); };
+  return wrap;
+}
+
+function render(){ grid.innerHTML=''; data.forEach(d=>grid.appendChild(card(d))); }
+
+function loadStarter(){
+  data = [
+    {tid:'T1110', name:'Brute Force', status:2, notes:'Linux auth.log via BluePulse; KQL saved query for 4625 bursts.'},
+    {tid:'T1078', name:'Valid Accounts', status:1, notes:'Alert on new local admin 4732/4728 + 4624 from unusual IP.'},
+    {tid:'T1059', name:'Command & Scripting', status:1, notes:'Sysmon EID1 + 4688 rare parent-child (winword→powershell).'},
+    {tid:'T1105', name:'Ingress Tool Transfer', status:1, notes:'Detect via PowerShell WebClient usage; proxy logs.'},
+    {tid:'T1003', name:'Credential Dumping', status:0, notes:'Plan LSASS access alerts via Sysmon EID10; add Sigma.'},
+    {tid:'T1486', name:'Data Encrypted for Impact', status:1, notes:'Rapid file change rate + shadow copy deletion.'},
+    {tid:'T1027', name:'Obfuscated/Compressed Files', status:0, notes:'Flag unusual encoders + LOLBAS archivers.'},
+    {tid:'T1047', name:'WMI', status:0, notes:'Process creation with wmic.exe & remote WMI events.'},
+    {tid:'T1566', name:'Phishing', status:2, notes:'PhishLens headers triage + URL IOC capture.'}
+  ];
+  save(true);
+}
+
+function addCustom(){
+  const tid = prompt('Technique ID (e.g., T1110):'); if(!tid) return;
+  const name = prompt('Technique name:')||'Custom';
+  data.push({tid, name, status:0, notes:'', updated:now()}); save();
+}
+
+function save(skipRender){ localStorage.setItem('attackmap', JSON.stringify(data)); if(!skipRender) render(); }
+function load(){ const s=localStorage.getItem('attackmap'); if(s){ data=JSON.parse(s); render(); } }
+
+function downloadJSON(){
+  const b = new Blob([JSON.stringify({generated:now(), items:data}, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href=URL.createObjectURL(b); a.download='attack-coverage.json'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+
+document.getElementById('y').textContent=new Date().getFullYear();
+document.getElementById('btnLoad').onclick=loadStarter;
+document.getElementById('btnAdd').onclick=addCustom;
+document.getElementById('btnJson').onclick=downloadJSON;
+document.getElementById('btnPrint').onclick=()=>window.print();
+document.getElementById('btnClear').onclick=()=>{ localStorage.removeItem('attackmap'); data=[]; render(); };
+load();
+</script>
+</body>
+</html>
