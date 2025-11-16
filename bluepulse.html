@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BluePulse — Static SIEM Reports</title>
+  <meta name="description" content="Client-side analyzer for Linux auth.log and Windows Security CSV: attacker IPs, failed logons, bursts, RDP, and admin changes. Exports JSON/PDF." />
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>try{document.documentElement.classList.add('dark')}catch(e){}</script>
+  <style>
+    :root{--neon:#22d3ee}
+    .neon{box-shadow:0 0 0 .5px rgba(34,211,238,.55),0 0 16px rgba(34,211,238,.28)}
+    .bar{height:10px;border-radius:6px;background:linear-gradient(90deg, rgba(34,211,238,.6), rgba(99,102,241,.6))}
+    code{background:rgba(255,255,255,.06);padding:.1rem .35rem;border-radius:.35rem;border:1px solid rgba(255,255,255,.08)}
+    .pill{display:inline-block;padding:.2rem .55rem;border-radius:.75rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05)}
+    @media print {.no-print{display:none!important}}
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-200 font-[Inter] selection:bg-cyan-500/20">
+  <!-- NAV -->
+  <header class="sticky top-0 z-30 backdrop-blur bg-slate-950/70 border-b border-white/5 no-print">
+    <nav class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <div class="text-cyan-300 font-extrabold tracking-tight">BLUEPULSE<span class="text-slate-400"> · by Wykiyanos</span></div>
+      <div class="hidden sm:flex gap-6 text-slate-300">
+        <a href="/" class="hover:text-white">← Back to Portfolio</a>
+        <a href="#how" class="hover:text-white">How it works</a>
+        <a href="#faq" class="hover:text-white">FAQ</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="mx-auto max-w-6xl px-4 pt-10 pb-6">
+    <div class="grid md:grid-cols-2 gap-8 items-center">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">BluePulse <span class="text-cyan-300">Log Analyzer</span></h1>
+        <p class="mt-3 text-slate-300">Upload a Linux <code>auth.log</code> or Windows Security <code>.csv</code>. Get attacker IPs, failed-logon bursts,
+          username spray, hourly histogram, and (CSV) new admin/user/remote-logon signals. 100% client-side.</p>
+        <div class="mt-5 flex flex-wrap gap-3 no-print">
+          <button id="btnSampleAuth" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">Load sample auth.log</button>
+          <button id="btnSampleCsv" class="px-4 py-2 rounded-xl bg-cyan-400/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-400/30 neon">Load sample Security.csv</button>
+          <button id="btnClear" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Clear</button>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-white/10 p-6 neon bg-slate-900/60">
+<pre class="text-xs leading-relaxed"><code># findings
+- Top source IPs
+- Spray usernames
+- Hourly histogram
+- Bursts (auth failures)
+- New admin / user created (CSV)
+- Successful RDP logons (CSV)</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOL -->
+  <section class="mx-auto max-w-6xl px-4 pb-10">
+    <div class="grid lg:grid-cols-2 gap-6">
+      <div class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 neon">
+        <label class="block text-sm text-slate-400 mb-2">Upload a log file (.log or .csv)</label>
+        <input id="file" type="file" accept=".log,.txt,.csv" class="w-full rounded-xl bg-slate-950/50 border border-white/10 p-3 outline-none focus:ring-2 focus:ring-cyan-500 no-print"/>
+
+        <label class="block text-sm text-slate-400 mt-4 mb-2">Or paste log text here</label>
+        <textarea id="paste" rows="10" class="w-full rounded-xl bg-slate-950/50 border border-white/10 p-3 outline-none focus:ring-2 focus:ring-cyan-500" placeholder="[Optional] Paste a few lines of auth.log or Security.csv here"></textarea>
+
+        <div class="mt-4 flex flex-wrap gap-3 no-print">
+          <button id="btnAnalyze" class="px-4 py-2 rounded-xl bg-emerald-400/20 text-emerald-200 border border-emerald-400/40 hover:bg-emerald-400/30">Analyze</button>
+          <button id="btnJson" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Download JSON</button>
+          <button id="btnPrint" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10">Save as PDF (Print)</button>
+        </div>
+
+        <p class="text-xs text-slate-500 mt-3">Tip: Windows → Event Viewer → Security → “Save All Events As…” → CSV. Linux → copy <code>/var/log/auth.log</code>.</p>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 p-5 bg-slate-900/60 neon">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-cyan-200">Results</h3>
+          <div id="meta" class="pill text-sm">format: —</div>
+        </div>
+        <div id="summary" class="mt-2 text-sm text-slate-300">(No analysis yet)</div>
+
+        <div class="mt-4 grid sm:grid-cols-2 gap-3">
+          <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+            <div class="text-sm text-slate-400">Top source IPs</div>
+            <div id="topIps" class="mt-2 text-sm space-y-2"></div>
+          </div>
+          <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+            <div class="text-sm text-slate-400">Sprayed usernames</div>
+            <div id="topUsers" class="mt-2 text-sm space-y-2"></div>
+          </div>
+          <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+            <div class="text-sm text-slate-400">Hourly failures</div>
+            <div id="hourly" class="mt-2 text-sm space-y-2"></div>
+          </div>
+          <div class="rounded-xl border border-white/10 p-3 bg-white/5">
+            <div class="text-sm text-slate-400">Windows-only signals</div>
+            <ul id="winsig" class="mt-2 text-sm space-y-1"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section id="how" class="mx-auto max-w-6xl px-4 pb-10">
+    <h2 class="text-2xl font-bold mb-3">How it works</h2>
+    <ul class="list-disc list-inside text-slate-300 space-y-1">
+      <li><b>Linux</b>: regex for <code>Failed password</code> from <code>sshd</code>, extracts IPv4 and username, bins by hour.</li>
+      <li><b>Windows CSV</b>: looks for EventIDs <code>4625</code> (failed logon), <code>4624</code> (success, RDP=type 10), <code>4732/4728</code> (admin group add), <code>4720</code> (user created).</li>
+      <li>Renders tiny bar charts from counts; nothing is uploaded anywhere.</li>
+    </ul>
+  </section>
+
+  <footer class="border-t border-white/5 py-6 text-center text-slate-500 text-sm no-print">
+    © <span id="y"></span> Wykiyanos — BluePulse • Hosted on GitHub Pages
+  </footer>
+
+<script>
+const by = x => document.getElementById(x);
+const el = (h,t) => {const d=document.createElement(h); if(t!=null)d.textContent=t; return d;};
+const fmtPct = (n,tot)=>tot?Math.round(n/tot*100):0;
+
+function parseAuthLog(text){
+  const lines = text.split(/\r?\n/);
+  const ipRe = /(\d{1,3}(?:\.\d{1,3}){3})/;
+  const userRe = /for (?:invalid user )?([A-Za-z0-9._-]+)/;
+  const failed = [];
+  for(const line of lines){
+    if(/sshd/i.test(line) && /Failed password/i.test(line)){
+      const ip = (line.match(ipRe)||[])[1]||'unknown';
+      const user = (line.match(userRe)||[])[1]||'unknown';
+      const h = (line.match(/\b(\d{2}):\d{2}:\d{2}\b/)||[])[1]||'--';
+      failed.push({ip,user,hour:h});
+    }
+  }
+  return {type:'linux', failed};
+}
+
+function parseCSV(text){
+  // Light CSV parser supporting quotes
+  const rows=[]; let i=0, field='', row=[], inQ=false;
+  for(; i<text.length; i++){
+    const c=text[i], n=text[i+1];
+    if(inQ){ if(c==='"' && n==='"'){ field+='"'; i++; } else if(c==='"'){ inQ=false; } else field+=c; }
+    else{
+      if(c==='"'){ inQ=true; }
+      else if(c===','){ row.push(field); field=''; }
+      else if(c==='\n' || c==='\r'){ if(field.length||row.length){ row.push(field); rows.push(row); field=''; row=[]; } }
+      else field+=c;
+    }
+  }
+  if(field.length||row.length){ row.push(field); rows.push(row); }
+  if(!rows.length) return {type:'csv', headers:[], entries:[]};
+  const headers = rows[0].map(h=>h.trim());
+  const entries = rows.slice(1).filter(r=>r.length===headers.length)
+    .map(r=>Object.fromEntries(r.map((v,idx)=>[headers[idx], v])));
+  return {type:'csv', headers, entries};
+}
+
+function analyzeWindows(entries, headers){
+  // best-effort key guesses
+  const key = name => headers.find(h=>h.toLowerCase().includes(name)) || '';
+  const idK = key('event') || key('eventid') || 'EventID';
+  const timeK = key('time') || 'TimeCreated';
+  const logonTypeK = headers.find(h=>/logontype/i.test(h)) || 'LogonType';
+  const tgtUserK = headers.find(h=>/target.*user/i.test(h)) || 'TargetUserName';
+  const procK = headers.find(h=>/new.*process.*name/i.test(h)) || 'NewProcessName';
+  const parentK = headers.find(h=>/parent.*process.*name/i.test(h)) || 'ParentProcessName';
+  const grpK = headers.find(h=>/group.*name/i.test(h)) || 'GroupName';
+
+  const fail = [], succ = [], adminAdds = [], userCreates=[];
+  entries.forEach(e=>{
+    const id = String(e[idK]||'').trim();
+    if(id==='4625') fail.push(e);
+    else if(id==='4624') succ.push(e);
+    else if(id==='4732' || id==='4728'){ if((e[grpK]||'').toLowerCase().includes('admin')) adminAdds.push(e); }
+    else if(id==='4720') userCreates.push(e);
+  });
+
+  // RDP success = logon type 10
+  const rdp = succ.filter(e=>String(e[logonTypeK]||'').trim()==='10');
+
+  // spray usernames from 4625
+  const failByUser = {};
+  fail.forEach(e=>{
+    const u = (e[tgtUserK]||'unknown').toLowerCase();
+    failByUser[u] = (failByUser[u]||0)+1;
+  });
+
+  return {fail, rdp, adminAdds, userCreates, failByUser,
+    keys:{idK,timeK,logonTypeK,tgtUserK,procK,parentK,grpK}};
+}
+
+function summarizeLinux(failed){
+  const byIp={}, byUser={}, byHour={};
+  failed.forEach(f=>{
+    byIp[f.ip]=(byIp[f.ip]||0)+1;
+    byUser[f.user]=(byUser[f.user]||0)+1;
+    byHour[f.hour]=(byHour[f.hour]||0)+1;
+  });
+  return {byIp, byUser, byHour};
+}
+
+function renderBars(container, dict){
+  container.innerHTML='';
+  const entries = Object.entries(dict).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const tot = entries.reduce((s,[,n])=>s+n,0);
+  entries.forEach(([k,v])=>{
+    const row=el('div'); row.className='flex items-center gap-3';
+    const label=el('div',k); label.className='w-28 truncate';
+    const barWrap=el('div'); barWrap.className='flex-1';
+    const bar=el('div'); bar.className='bar'; bar.style.width=Math.max(6,fmtPct(v,tot))+'%';
+    const val=el('div',String(v)); val.className='w-10 text-right';
+    barWrap.appendChild(bar);
+    row.append(label, barWrap, val);
+    container.appendChild(row);
+  });
+  if(!entries.length) container.textContent='—';
+}
+
+function setSummary(text){ by('summary').textContent=text; }
+
+function downloadJSON(obj, name='bluepulse-report.json'){
+  const b = new Blob([JSON.stringify(obj,null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download=name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000);
+}
+
+let lastReport=null;
+
+async function analyze(){
+  const file = by('file').files[0];
+  let text = by('paste').value.trim();
+  if(file){ text = await file.text(); }
+
+  if(!text){ setSummary('(No input)'); return; }
+
+  // detect csv vs auth.log
+  const isCSV = /,/.test(text.split(/\r?\n/)[0]) && /event|time|id|logon/i.test(text.split(/\r?\n/)[0]);
+  if(isCSV){
+    const {headers, entries} = parseCSV(text);
+    by('meta').textContent='format: Windows CSV';
+    const w = analyzeWindows(entries, headers);
+    // convert fail 4625 to hourly (best-effort)
+    const hourRe = /(\d{2}):\d{2}:\d{2}/;
+    const hourly = {};
+    w.fail.forEach(e=>{
+      const t = Object.values(e).find(v=>/\d{2}:\d{2}:\d{2}/.test(v))||'--:--:--';
+      const h = (t.match(hourRe)||[])[1]||'--';
+      hourly[h]=(hourly[h]||0)+1;
+    });
+    const failByUser = w.failByUser;
+
+    // render
+    setSummary(`Failed logons: ${w.fail.length} • RDP successes: ${w.rdp.length} • New admins: ${w.adminAdds.length} • New users: ${w.userCreates.length}`);
+    renderBars(by('topIps'), {}); // IPs not always present in CSV; leave empty
+    renderBars(by('topUsers'), failByUser);
+    renderBars(by('hourly'), hourly);
+
+    const sig = by('winsig'); sig.innerHTML='';
+    const items=[
+      ['RDP successes (4624 type 10)', w.rdp.length],
+      ['Admin group adds (4732/4728)', w.adminAdds.length],
+      ['User creations (4720)', w.userCreates.length]
+    ];
+    items.forEach(([k,v])=>{ const li=el('li',`${k}: ${v}`); sig.appendChild(li); });
+
+    lastReport = {format:'windows_csv', counts:{failed:w.fail.length, rdp:w.rdp.length, adminAdds:w.adminAdds.length, userCreates:w.userCreates.length}, hourly, failByUser, keys:w.keys};
+  } else {
+    const L = parseAuthLog(text);
+    by('meta').textContent='format: Linux auth.log';
+    const s = summarizeLinux(L.failed);
+    setSummary(`Failed SSH logons: ${L.failed.length} (top sources, usernames, and hours below)`);
+    renderBars(by('topIps'), s.byIp);
+    renderBars(by('topUsers'), s.byUser);
+    renderBars(by('hourly'), s.byHour);
+    by('winsig').innerHTML='(Windows-only signals not available for auth.log)';
+    lastReport = {format:'linux_auth', totals:{failed:L.failed.length}, ...s};
+  }
+}
+
+const sampleAuth = `Nov 12 09:14:02 server sshd[2121]: Failed password for invalid user admin from 203.0.113.10 port 55123 ssh2
+Nov 12 09:14:06 server sshd[2121]: Failed password for invalid user root from 203.0.113.10 port 55124 ssh2
+Nov 12 10:33:44 server sshd[3133]: Failed password for wykiy from 198.51.100.22 port 51022 ssh2
+Nov 12 10:33:49 server sshd[3133]: Failed password for wykiy from 198.51.100.22 port 51030 ssh2
+Nov 12 10:33:55 server sshd[3133]: Failed password for wykiy from 198.51.100.22 port 51045 ssh2
+Nov 12 13:01:11 server sshd[4001]: Failed password for invalid user test from 203.0.113.10 port 55188 ssh2`;
+
+const sampleCSV = `EventID,TimeCreated,TargetUserName,LogonType,GroupName,NewProcessName,ParentProcessName
+4625,2025-11-10 09:14:02,admin,,,
+4625,2025-11-10 09:14:06,root,,,
+4624,2025-11-10 10:01:00,wykiy,10,,
+4732,2025-11-10 10:05:00,,,"C:\\\\Windows\\\\System32\\\\net.exe","C:\\\\Windows\\\\System32\\\\cmd.exe"
+4720,2025-11-10 10:06:00,newhelpdesk,,,
+4625,2025-11-10 10:33:44,wykiy,,,
+4625,2025-11-10 10:33:49,wykiy,,,
+4625,2025-11-10 10:33:55,wykiy,,,`;
+
+by('y').textContent=new Date().getFullYear();
+by('btnAnalyze').onclick=analyze;
+by('btnJson').onclick=()=>{ if(!lastReport) analyze(); downloadJSON(lastReport); };
+by('btnPrint').onclick=()=>{ if(!lastReport) analyze(); window.print(); };
+by('btnSampleAuth').onclick=()=>{ by('paste').value=sampleAuth; };
+by('btnSampleCsv').onclick=()=>{ by('paste').value=sampleCSV; };
+by('btnClear').onclick=()=>{ by('paste').value=''; by('file').value=''; by('summary').textContent='(Cleared)'; by('topIps').innerHTML=''; by('topUsers').innerHTML=''; by('hourly').innerHTML=''; by('winsig').innerHTML=''; by('meta').textContent='format: —'; lastReport=null; };
+</script>
+</body>
+</html>
