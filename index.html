@@ -416,20 +416,291 @@ print(Counter(ips).most_common(5))</code></pre>
       </div>
     </section>
 
-    <!-- SKILLS -->
-    <section id="skills" class="mx-auto max-w-7xl px-4 py-8">
-      <h2 class="text-2xl font-bold mb-4">Skills & Tools</h2>
-      <div class="flex flex-wrap gap-2">
-        <span class="px-3 py-1.5 text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">Python</span>
-        <span class="px-3 py-1.5 text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">Linux</span>
-        <span class="px-3 py-1.5 text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">SQL</span>
-        <span class="px-3 py-1.5 text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">Wireshark</span>
-        <span class="px-3 py-1.5 text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">Nmap</span>
-        <span class="px-3 py-1.5 text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">Git & GitHub</span>
-        <span class="px-3 py-1.5 text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">Regex</span>
-        <span class="px-3 py-1.5 text-sm rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">SIEM (basics)</span>
+    <!-- SKILLS (aligned with site theming) -->
+<section id="skills" class="mx-auto max-w-7xl px-4 py-12">
+  <header class="mb-6">
+    <h2 class="text-2xl font-extrabold tracking-tight">
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-700 to-emerald-600 dark:from-cyan-300 dark:to-emerald-300">
+        Skills & Tools
+      </span>
+    </h2>
+    <p class="text-slate-600 dark:text-slate-400">Tap a card to see how I use it + why you should hire me.</p>
+  </header>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Card template -->
+    <button type="button"
+      class="group text-left rounded-2xl border border-slate-900/10 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 neon p-5 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+      data-skill-target="skill-python" aria-controls="skill-python" aria-expanded="false">
+      <div class="flex items-center gap-3">
+        <span class="relative grid place-items-center w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40">
+          <!-- code icon -->
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" class="opacity-90">
+            <path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13 6l-2 12" stroke="currentColor" stroke-width="1.6"
+                  class="text-cyan-700 dark:text-cyan-300"/>
+          </svg>
+        </span>
+        <div class="flex-1">
+          <div class="font-semibold text-cyan-700 dark:text-cyan-300">Python</div>
+          <div class="text-xs text-slate-600 dark:text-slate-400">Automation & parsing</div>
+        </div>
+        <svg class="chev ml-2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
       </div>
-    </section>
+      <div id="skill-python" class="skill-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out mt-3">
+        <div class="overflow-hidden">
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            I write small utilities to parse logs, extract IOCs, and summarize spikes. Example: counting failed SSH by IP,
+            flagging brute-force bursts, and exporting CSV for the team.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <a href="#evidence" class="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10">See Evidence Labs</a>
+            <a href="mailto:wykiyanosa@gmail.com?subject=Interview%20Request%20—%20Python%20Automation" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/25 dark:hover:bg-cyan-400/30">Hire me for automation</a>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button"
+      class="group text-left rounded-2xl border border-slate-900/10 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 neon p-5 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+      data-skill-target="skill-linux" aria-controls="skill-linux" aria-expanded="false">
+      <div class="flex items-center gap-3">
+        <span class="relative grid place-items-center w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40">
+          <!-- terminal icon -->
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <path d="M7 8l3 3-3 3M11 16h6" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+          </svg>
+        </span>
+        <div class="flex-1">
+          <div class="font-semibold text-cyan-700 dark:text-cyan-300">Linux</div>
+          <div class="text-xs text-slate-600 dark:text-slate-400">Shell & ops</div>
+        </div>
+        <svg class="chev ml-2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+      </div>
+      <div id="skill-linux" class="skill-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out mt-3">
+        <div class="overflow-hidden">
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            Efficient with SSH, permissions, systemctl/journalctl, grep/awk, and hardening basics (e.g., fail2ban, ufw).
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <a href="#evidence" class="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10">See Evidence Labs</a>
+            <a href="mailto:wykiyanosa@gmail.com?subject=Interview%20—%20Linux%20Ops" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/25 dark:hover:bg-cyan-400/30">Invite me for a screen</a>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button"
+      class="group text-left rounded-2xl border border-slate-900/10 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 neon p-5 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+      data-skill-target="skill-sql" aria-controls="skill-sql" aria-expanded="false">
+      <div class="flex items-center gap-3">
+        <span class="relative grid place-items-center w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40">
+          <!-- database icon -->
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <ellipse cx="12" cy="6" rx="7" ry="3" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+            <path d="M5 6v6c0 1.66 3.13 3 7 3s7-1.34 7-3V6M5 12v6c0 1.66 3.13 3 7 3s7-1.34 7-3v-6" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+          </svg>
+        </span>
+        <div class="flex-1">
+          <div class="font-semibold text-cyan-700 dark:text-cyan-300">SQL</div>
+          <div class="text-xs text-slate-600 dark:text-slate-400">Investigation queries</div>
+        </div>
+        <svg class="chev ml-2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+      </div>
+      <div id="skill-sql" class="skill-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out mt-3">
+        <div class="overflow-hidden">
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            I write queries for failed logons, new admin creations, rare processes, and session outliers. Comfortable with JOINs, CTEs, and grouping.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <a href="#evidence" class="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10">See sample SQL/KQL</a>
+            <a href="mailto:wykiyanosa@gmail.com?subject=Interview%20—%20Analyst%20Queries" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/25 dark:hover:bg-cyan-400/30">Discuss my approach</a>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button"
+      class="group text-left rounded-2xl border border-slate-900/10 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 neon p-5 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+      data-skill-target="skill-wireshark" aria-controls="skill-wireshark" aria-expanded="false">
+      <div class="flex items-center gap-3">
+        <span class="relative grid place-items-center w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40">
+          <!-- magnifier icon -->
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+            <path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+          </svg>
+        </span>
+        <div class="flex-1">
+          <div class="font-semibold text-cyan-700 dark:text-cyan-300">Wireshark</div>
+          <div class="text-xs text-slate-600 dark:text-slate-400">Packet analysis</div>
+        </div>
+        <svg class="chev ml-2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+      </div>
+      <div id="skill-wireshark" class="skill-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out mt-3">
+        <div class="overflow-hidden">
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            Filter suspicious hosts, follow TCP streams, confirm C2 patterns, and tag domains for blocklists.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <a href="#evidence" class="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10">See my notes</a>
+            <a href="mailto:wykiyanosa@gmail.com?subject=Interview%20—%20Wireshark" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/25 dark:hover:bg-cyan-400/30">Talk through a pcap</a>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button"
+      class="group text-left rounded-2xl border border-slate-900/10 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 neon p-5 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+      data-skill-target="skill-nmap" aria-controls="skill-nmap" aria-expanded="false">
+      <div class="flex items-center gap-3">
+        <span class="relative grid place-items-center w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40">
+          <!-- radar icon -->
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+            <path d="M12 12l6-6M12 4v4M20 12h-4" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+          </svg>
+        </span>
+        <div class="flex-1">
+          <div class="font-semibold text-cyan-700 dark:text-cyan-300">Nmap</div>
+          <div class="text-xs text-slate-600 dark:text-slate-400">Discovery & baseline</div>
+        </div>
+        <svg class="chev ml-2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+      </div>
+      <div id="skill-nmap" class="skill-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out mt-3">
+        <div class="overflow-hidden">
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            Host discovery, version detection, and safe NSE scripts to build a clean service baseline.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <a href="#evidence" class="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10">See baseline sample</a>
+            <a href="mailto:wykiyanosa@gmail.com?subject=Interview%20—%20Nmap%20Baseline" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/25 dark:hover:bg-cyan-400/30">Discuss scan profiles</a>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button"
+      class="group text-left rounded-2xl border border-slate-900/10 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 neon p-5 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+      data-skill-target="skill-git" aria-controls="skill-git" aria-expanded="false">
+      <div class="flex items-center gap-3">
+        <span class="relative grid place-items-center w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40">
+          <!-- git branch icon -->
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <circle cx="6" cy="6" r="2" fill="currentColor" class="text-cyan-700 dark:text-cyan-300"/>
+            <circle cx="6" cy="18" r="2" fill="currentColor" class="text-cyan-700 dark:text-cyan-300"/>
+            <circle cx="18" cy="12" r="2" fill="currentColor" class="text-cyan-700 dark:text-cyan-300"/>
+            <path d="M8 6h6a4 4 0 014 4v0" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+            <path d="M6 8v8" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+          </svg>
+        </span>
+        <div class="flex-1">
+          <div class="font-semibold text-cyan-700 dark:text-cyan-300">Git & GitHub</div>
+          <div class="text-xs text-slate-600 dark:text-slate-400">Versioning & Pages</div>
+        </div>
+        <svg class="chev ml-2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+      </div>
+      <div id="skill-git" class="skill-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out mt-3">
+        <div class="overflow-hidden">
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            Clean commits, branches, PRs, and Pages deploys. I keep evidence labs public and reproducible.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <a href="https://github.com/oceanasrat" target="_blank" rel="noopener" class="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10">Open my GitHub</a>
+            <a href="mailto:wykiyanosa@gmail.com?subject=Interview%20—%20GitHub%20Workflow" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/25 dark:hover:bg-cyan-400/30">Ask about my workflow</a>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button"
+      class="group text-left rounded-2xl border border-slate-900/10 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 neon p-5 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+      data-skill-target="skill-regex" aria-controls="skill-regex" aria-expanded="false">
+      <div class="flex items-center gap-3">
+        <span class="relative grid place-items-center w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40">
+          <!-- regex icon -->
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <path d="M6 8l3 3-3 3M14 7h4M14 12h6M14 17h3" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+          </svg>
+        </span>
+        <div class="flex-1">
+          <div class="font-semibold text-cyan-700 dark:text-cyan-300">Regex</div>
+          <div class="text-xs text-slate-600 dark:text-slate-400">IOC extraction</div>
+        </div>
+        <svg class="chev ml-2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+      </div>
+      <div id="skill-regex" class="skill-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out mt-3">
+        <div class="overflow-hidden">
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            Robust patterns for IPs, domains, hashes, and URLs to triage quickly without false positives.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <a href="#evidence" class="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10">See extraction demo</a>
+            <a href="mailto:wykiyanosa@gmail.com?subject=Interview%20—%20Regex%20Parsing" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/25 dark:hover:bg-cyan-400/30">Discuss patterns</a>
+          </div>
+        </div>
+      </div>
+    </button>
+
+    <button type="button"
+      class="group text-left rounded-2xl border border-slate-900/10 dark:border-white/10 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900 neon p-5 transition focus:outline-none focus:ring-2 focus:ring-cyan-400/40"
+      data-skill-target="skill-siem" aria-controls="skill-siem" aria-expanded="false">
+      <div class="flex items-center gap-3">
+        <span class="relative grid place-items-center w-10 h-10 rounded-xl bg-cyan-500/15 border border-cyan-400/40">
+          <!-- shield/chart icon -->
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <path d="M12 3l7 3v6a9 9 0 11-14 0V6l7-3z" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+            <path d="M9 15v3M12 13v5M15 11v7" stroke="currentColor" stroke-width="1.6" class="text-cyan-700 dark:text-cyan-300"/>
+          </svg>
+        </span>
+        <div class="flex-1">
+          <div class="font-semibold text-cyan-700 dark:text-cyan-300">SIEM (basics)</div>
+          <div class="text-xs text-slate-600 dark:text-slate-400">Sentinel/Splunk triage</div>
+        </div>
+        <svg class="chev ml-2 h-4 w-4 text-slate-500 dark:text-slate-400 transition-transform" viewBox="0 0 20 20" fill="currentColor"><path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"/></svg>
+      </div>
+      <div id="skill-siem" class="skill-panel grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out mt-3">
+        <div class="overflow-hidden">
+          <p class="text-sm text-slate-700 dark:text-slate-300">
+            Alert triage with KQL basics, validation of IOCs, and crisp ticket notes that move real issues forward.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs">
+            <a href="#evidence" class="px-3 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 hover:bg-black/10 dark:hover:bg-white/10">See triage notes</a>
+            <a href="mailto:wykiyanosa@gmail.com?subject=Interview%20—%20Tier%201%20SOC" class="px-3 py-1.5 rounded-lg bg-cyan-500/15 text-cyan-700 dark:text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/25 dark:hover:bg-cyan-400/30">Invite me for SOC</a>
+          </div>
+        </div>
+      </div>
+    </button>
+  </div>
+</section>
+
+<!-- Skills cards behavior -->
+<script>
+  (function () {
+    const cards = document.querySelectorAll('[data-skill-target]');
+    cards.forEach(card => {
+      const id = card.getAttribute('data-skill-target');
+      const panel = document.getElementById(id);
+      const chev  = card.querySelector('.chev');
+      card.addEventListener('click', () => {
+        const open = card.getAttribute('aria-expanded') === 'true';
+        // close all others
+        document.querySelectorAll('[data-skill-target][aria-expanded="true"]').forEach(openCard => {
+          if (openCard === card) return;
+          openCard.setAttribute('aria-expanded', 'false');
+          const pid = openCard.getAttribute('data-skill-target');
+          const p   = document.getElementById(pid);
+          const c   = openCard.querySelector('.chev');
+          if (p) p.style.gridTemplateRows = '0fr';
+          if (c) c.style.transform = 'rotate(0deg)';
+        });
+        // toggle this one
+        card.setAttribute('aria-expanded', String(!open));
+        if (panel) panel.style.gridTemplateRows = open ? '0fr' : '1fr';
+        if (chev)  chev.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+      });
+    });
+  }());
+</script>
 
     <!-- PROGRESS -->
     <section id="progress" class="mx-auto max-w-7xl px-4 py-8">
